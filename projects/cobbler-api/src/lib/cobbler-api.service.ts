@@ -1507,6 +1507,38 @@ export class CobblerApiService {
       );
   }
 
+  find_template(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<any>> {
+    return this.client
+      .methodCall('find_template', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, Array<any>>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as Array<any>;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Finding the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
   find_items_paged(
     what: string,
     criteria: object,
@@ -2021,6 +2053,32 @@ export class CobblerApiService {
         },
       ),
     );
+  }
+
+  remove_template(
+    name: string,
+    token: string,
+    recursive = true,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('remove_template', [name, token, recursive])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Removing the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
   }
 
   copy_item(
@@ -3941,6 +3999,26 @@ export class CobblerApiService {
       );
   }
 
+  get_templates(): Observable<string> {
+    return this.client.methodCall('get_templates').pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the requested templates failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
   get_template_file_for_profile(
     profileName: string,
     path: string,
@@ -4892,31 +4970,6 @@ export class CobblerApiService {
                   responseData.faultCode +
                   '" and error message "' +
                   responseData.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
-  }
-
-  remove_autoinstall_template(
-    filePath: string,
-    token: string,
-  ): Observable<boolean> {
-    return this.client
-      .methodCall('remove_autoinstall_template', [filePath, token])
-      .pipe(
-        map<MethodResponse | MethodFault, boolean>(
-          (data: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as boolean;
-            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-              throw new Error(
-                'Removing the auto-installation template failed with code "' +
-                  data.faultCode +
-                  '" and error message "' +
-                  data.faultString +
                   '"',
               );
             }
