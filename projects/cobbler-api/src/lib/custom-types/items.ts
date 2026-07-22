@@ -227,3 +227,27 @@ export interface Menu extends BootableItem {
   display_name: string;
   children: Array<string>;
 }
+
+export type ResolvedValue = string | number | Array<any> | Record<string, any>;
+
+export type AttributeValue =
+  | string
+  | number
+  | Array<string>
+  | Record<string, any>;
+
+export type XmlrpcHacksInput =
+  | Array<any>
+  | Record<string, any>
+  | number
+  | string
+  | undefined;
+
+export type ModifyValue =
+  | string
+  | boolean
+  | number
+  | Record<string, any>
+  | Array<any>;
+
+export type RestValue = Record<string, any>;

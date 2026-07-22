@@ -21,6 +21,12 @@ import {
   System,
   File,
   Menu,
+  ResolvedValue,
+  NetworkInterface,
+  AttributeValue,
+  ModifyValue,
+  RestValue,
+  XmlrpcHacksInput,
 } from './custom-types/items';
 import {
   BackgroundAclSetupOptions,
@@ -234,6 +240,7 @@ export class CobblerApiService {
         ),
       );
   }
+
   backgroundMkloaders(token: string): Observable<string> {
     const mkloadersOptions: XmlRpcStruct = { members: [] };
     return this.client
@@ -468,6 +475,83 @@ export class CobblerApiService {
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Updating the signatures in the background failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  background_signature_reload(token: string): Observable<string> {
+    const signatureReloadOptions: XmlRpcStruct = { members: [] };
+    return this.client
+      .methodCall('background_signature_reload', [
+        signatureReloadOptions,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, string>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as string;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Reloading the signatures in the background failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  background_templates_refresh_content(token: string): Observable<string> {
+    const templateRefreshContentOptions: XmlRpcStruct = { members: [] };
+    return this.client
+      .methodCall('background_templates_refresh_content', [
+        templateRefreshContentOptions,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, string>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as string;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Refreshing the template contents in the background failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  templates_refresh_content(
+    objects: Array<string>,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('templates_refresh_content', [objects, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Refreshing the template contents failed with code "' +
                   data.faultCode +
                   '" and error message "' +
                   data.faultString +
@@ -825,6 +909,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   get_mgmtclass(
     name: string,
     flatten: boolean = false,
@@ -856,6 +941,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   get_package(
     name: string,
     flatten: boolean = false,
@@ -887,6 +973,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   get_file(
     name: string,
     flatten: boolean = false,
@@ -949,6 +1036,37 @@ export class CobblerApiService {
       );
   }
 
+  get_network_interface(
+    name: string,
+    flatten = false,
+    resolved = false,
+    token: string,
+  ): Observable<NetworkInterface> {
+    return this.client
+      .methodCall('get_network_interface', [name, flatten, resolved, token])
+      .pipe(
+        map<MethodResponse | MethodFault, NetworkInterface>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              if (!(data.value instanceof Map)) {
+                throw new Error('Expected Map not something else!');
+              }
+              const result = this.rebuildItem(data.value);
+              return result as NetworkInterface;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Getting the requested network interface failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
   get_items(what: string): Observable<Array<object>> {
     // TODO: Add magic for casting to correct Collection
     return this.client.methodCall('get_items', [what]).pipe(
@@ -992,6 +1110,31 @@ export class CobblerApiService {
         },
       ),
     );
+  }
+
+  get_item_resolved_value(
+    itemUuid: string,
+    attribute: Array<string>,
+  ): Observable<ResolvedValue> {
+    return this.client
+      .methodCall('get_item_resolved_value', [itemUuid, attribute])
+      .pipe(
+        map<MethodResponse | MethodFault, ResolvedValue>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as ResolvedValue;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Getting the resolved item value failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
   }
 
   get_distros(): Observable<Array<Distro>> {
@@ -1144,6 +1287,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_mgmtclasses(): Observable<Array<Mgmgtclass>> {
     return this.client.methodCall('get_mgmtclasses').pipe(
       map<MethodResponse | MethodFault, Array<Mgmgtclass>>(
@@ -1174,6 +1318,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_packages(): Observable<Array<Package>> {
     return this.client.methodCall('get_packages').pipe(
       map<MethodResponse | MethodFault, Array<Package>>(
@@ -1204,6 +1349,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_files(): Observable<Array<File>> {
     return this.client.methodCall('get_files').pipe(
       map<MethodResponse | MethodFault, Array<File>>(
@@ -1264,25 +1410,79 @@ export class CobblerApiService {
     );
   }
 
+  get_network_interfaces(): Observable<Array<NetworkInterface>> {
+    return this.client.methodCall('get_network_interfaces').pipe(
+      map<MethodResponse | MethodFault, Array<NetworkInterface>>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            if (!(data.value instanceof Array)) {
+              throw new Error('Expected Array but got something else!');
+            }
+            const result = [];
+            data.value.forEach((value) => {
+              if (!(value instanceof Map)) {
+                throw new Error('Expected Map not something else!');
+              }
+              result.push(this.rebuildItem(value));
+            });
+            return result as Array<NetworkInterface>;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the network interfaces failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_templates(): Observable<string> {
+    return this.client.methodCall('get_templates').pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the requested templates failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
   find_items(
     what: string,
     criteria: object,
     sortField: string,
-    expand: boolean,
-  ): Observable<Array<object>> {
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<any>> {
     return this.client
       .methodCall('find_items', [
         what,
         criteria as XmlRpcStruct,
         sortField,
         expand,
+        resolved,
+        token,
       ])
       .pipe(
-        map<MethodResponse | MethodFault, Array<object>>(
+        map<MethodResponse | MethodFault, Array<any>>(
           (data: MethodResponse | MethodFault) => {
             if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
               // FIXME: Make the cast without the unknown possible
-              return data.value as unknown as Array<object>;
+              return data.value as unknown as Array<any>;
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Finding the requested items failed with code "' +
@@ -1297,9 +1497,19 @@ export class CobblerApiService {
       );
   }
 
-  find_distro(criteria: object, expand: boolean): Observable<Array<Distro>> {
+  find_distro(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<Distro>> {
     return this.client
-      .methodCall('find_distro', [criteria as XmlRpcStruct, expand])
+      .methodCall('find_distro', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, Array<Distro>>(
           (data: MethodResponse | MethodFault) => {
@@ -1320,9 +1530,19 @@ export class CobblerApiService {
       );
   }
 
-  find_profile(criteria: object, expand: boolean): Observable<Array<Profile>> {
+  find_profile(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<Profile>> {
     return this.client
-      .methodCall('find_profile', [criteria as XmlRpcStruct, expand])
+      .methodCall('find_profile', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, Array<Profile>>(
           (data: MethodResponse | MethodFault) => {
@@ -1343,9 +1563,19 @@ export class CobblerApiService {
       );
   }
 
-  find_system(criteria: object, expand: boolean): Observable<Array<System>> {
+  find_system(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<System>> {
     return this.client
-      .methodCall('find_system', [criteria as XmlRpcStruct, expand])
+      .methodCall('find_system', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, Array<System>>(
           (data: MethodResponse | MethodFault) => {
@@ -1366,9 +1596,19 @@ export class CobblerApiService {
       );
   }
 
-  find_repo(criteria: object, expand: boolean): Observable<Array<Repo>> {
+  find_repo(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<Repo>> {
     return this.client
-      .methodCall('find_repo', [criteria as XmlRpcStruct, expand])
+      .methodCall('find_repo', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, Array<Repo>>(
           (data: MethodResponse | MethodFault) => {
@@ -1389,9 +1629,19 @@ export class CobblerApiService {
       );
   }
 
-  find_image(criteria: object, expand: boolean): Observable<Array<Image>> {
+  find_image(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<Image>> {
     return this.client
-      .methodCall('find_image', [criteria as XmlRpcStruct, expand])
+      .methodCall('find_image', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, Array<Image>>(
           (data: MethodResponse | MethodFault) => {
@@ -1412,6 +1662,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   find_mgmtclass(
     criteria: object,
     expand: boolean,
@@ -1438,6 +1689,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   find_package(criteria: object, expand: boolean): Observable<Array<Package>> {
     return this.client
       .methodCall('find_package', [criteria as XmlRpcStruct, expand])
@@ -1461,6 +1713,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   find_file(criteria: object, expand: boolean): Observable<Array<File>> {
     return this.client
       .methodCall('find_file', [criteria as XmlRpcStruct, expand])
@@ -1484,9 +1737,19 @@ export class CobblerApiService {
       );
   }
 
-  find_menu(criteria: object, expand: boolean): Observable<Array<Menu>> {
+  find_menu(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<Menu>> {
     return this.client
-      .methodCall('find_menu', [criteria as XmlRpcStruct, expand])
+      .methodCall('find_menu', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, Array<Menu>>(
           (data: MethodResponse | MethodFault) => {
@@ -1528,6 +1791,38 @@ export class CobblerApiService {
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Finding the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  find_network_interface(
+    criteria: object,
+    expand = false,
+    resolved = false,
+    token: string,
+  ): Observable<Array<NetworkInterface>> {
+    return this.client
+      .methodCall('find_network_interface', [
+        criteria as XmlRpcStruct,
+        expand,
+        resolved,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, Array<NetworkInterface>>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as unknown as Array<NetworkInterface>;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Finding the requested network interface failed with code "' +
                   data.faultCode +
                   '" and error message "' +
                   data.faultString +
@@ -1620,8 +1915,8 @@ export class CobblerApiService {
     );
   }
 
-  get_distro_handle(name: string, token: string): Observable<string> {
-    return this.client.methodCall('get_distro_handle', [name, token]).pipe(
+  get_distro_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_distro_handle', [name]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -1640,8 +1935,8 @@ export class CobblerApiService {
     );
   }
 
-  get_profile_handle(name: string, token: string): Observable<string> {
-    return this.client.methodCall('get_profile_handle', [name, token]).pipe(
+  get_profile_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_profile_handle', [name]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -1660,8 +1955,8 @@ export class CobblerApiService {
     );
   }
 
-  get_system_handle(name: string, token: string): Observable<string> {
-    return this.client.methodCall('get_system_handle', [name, token]).pipe(
+  get_system_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_system_handle', [name]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -1680,8 +1975,8 @@ export class CobblerApiService {
     );
   }
 
-  get_repo_handle(name: string, token: string): Observable<string> {
-    return this.client.methodCall('get_repo_handle', [name, token]).pipe(
+  get_repo_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_repo_handle', [name]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -1700,8 +1995,8 @@ export class CobblerApiService {
     );
   }
 
-  get_image_handle(name: string, token: string): Observable<string> {
-    return this.client.methodCall('get_image_handle', [name, token]).pipe(
+  get_image_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_image_handle', [name]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -1720,6 +2015,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_mgmtclass_handle(name: string, token: string): Observable<string> {
     return this.client.methodCall('get_mgmtclass_handle', [name, token]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -1740,6 +2036,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_package_handle(name: string, token: string): Observable<string> {
     return this.client.methodCall('get_package_handle', [name, token]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -1760,6 +2057,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_file_handle(name: string, token: string): Observable<string> {
     return this.client.methodCall('get_file_handle', [name, token]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -1780,8 +2078,8 @@ export class CobblerApiService {
     );
   }
 
-  get_menu_handle(name: string, token: string): Observable<string> {
-    return this.client.methodCall('get_menu_handle', [name, token]).pipe(
+  get_menu_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_menu_handle', [name]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -1789,6 +2087,104 @@ export class CobblerApiService {
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the file handle failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_network_interface_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_network_interface_handle', [name]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the network interface handle failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString,
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_template_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_template_handle', [name]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the template handle failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString,
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_distro_group_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_distro_group_handle', [name]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the distro group handle failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_profile_group_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_profile_group_handle', [name]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the profile group handle failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_system_group_handle(name: string): Observable<string> {
+    return this.client.methodCall('get_system_group_handle', [name]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the system group handle failed with code "' +
                 data.faultCode +
                 '" and error message "' +
                 data.faultString +
@@ -1955,6 +2351,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   remove_mgmtclass(
     name: string,
     token: string,
@@ -1981,6 +2378,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   remove_package(
     name: string,
     token: string,
@@ -2007,6 +2405,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   remove_file(
     name: string,
     token: string,
@@ -2070,6 +2469,110 @@ export class CobblerApiService {
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Removing the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  remove_network_interface(
+    name: string,
+    token: string,
+    recursive = true,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('remove_network_interface', [name, token, recursive])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Removing the requested network interface failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  remove_distro_group(
+    name: string,
+    token: string,
+    recursive = true,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('remove_distro_group', [name, token, recursive])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Removing the requested distro group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  remove_profile_group(
+    name: string,
+    token: string,
+    recursive = true,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('remove_profile_group', [name, token, recursive])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Removing the requested profile group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  remove_system_group(
+    name: string,
+    token: string,
+    recursive = true,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('remove_system_group', [name, token, recursive])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Removing the requested system group failed with code "' +
                   data.faultCode +
                   '" and error message "' +
                   data.faultString +
@@ -2236,6 +2739,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   copy_mgmtclass(
     objectId: string,
     newName: string,
@@ -2262,6 +2766,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   copy_package(
     objectId: string,
     newName: string,
@@ -2288,6 +2793,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   copy_file(
     objectId: string,
     newName: string,
@@ -2336,6 +2842,136 @@ export class CobblerApiService {
     );
   }
 
+  copy_network_interface(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('copy_network_interface', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Copying the requested network interface failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  copy_template(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('copy_template', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Copying the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  copy_distro_group(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('copy_distro_group', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Copying the requested distro group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  copy_profile_group(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('copy_profile_group', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Copying the requested profile group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  copy_system_group(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('copy_system_group', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Copying the requested system group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
   rename_item(
     what: string,
     objectId: string,
@@ -2343,7 +2979,7 @@ export class CobblerApiService {
     token: string,
   ): Observable<boolean> {
     return this.client
-      .methodCall('rename_item', [objectId, newName, token])
+      .methodCall('rename_item', [what, objectId, newName, token])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -2493,6 +3129,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   rename_mgmtclass(
     objectId: string,
     newName: string,
@@ -2519,6 +3156,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   rename_package(
     objectId: string,
     newName: string,
@@ -2545,6 +3183,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   rename_file(
     objectId: string,
     newName: string,
@@ -2597,10 +3236,141 @@ export class CobblerApiService {
       );
   }
 
+  rename_network_interface(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('rename_network_interface', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Renaming the requested network interface failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  rename_template(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('rename_template', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Renaming the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  rename_distro_group(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('rename_distro_group', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Renaming the requested distro group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  rename_profile_group(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('rename_profile_group', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Renaming the requested profile group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  rename_system_group(
+    objectId: string,
+    newName: string,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('rename_system_group', [objectId, newName, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Renaming the requested system group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
   new_item(
     what: string,
     token: string,
     isSubobject = false,
+    rest?: RestValue,
   ): Observable<string> {
     return this.client.methodCall('new_item', [what, token, isSubobject]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -2741,6 +3511,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   new_mgmtclass(token: string): Observable<string> {
     return this.client.methodCall('new_mgmtclass', [token]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -2761,6 +3532,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   new_package(token: string): Observable<string> {
     return this.client.methodCall('new_package', [token]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -2781,6 +3553,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   new_file(token: string): Observable<string> {
     return this.client.methodCall('new_file', [token]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -2821,15 +3594,123 @@ export class CobblerApiService {
     );
   }
 
+  new_network_interface(systemUid: string, token: string): Observable<string> {
+    return this.client
+      .methodCall('new_network_interface', [systemUid, token])
+      .pipe(
+        map<MethodResponse | MethodFault, string>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as string;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Creating a new network interface failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  new_template(token: string): Observable<string> {
+    return this.client.methodCall('new_template', [token]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Creating a new template failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  new_distro_group(token: string): Observable<string> {
+    return this.client.methodCall('new_distro_group', [token]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Creating a new distro group failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  new_profile_group(token: string): Observable<string> {
+    return this.client.methodCall('new_profile_group', [token]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Creating a new profile group failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  new_system_group(token: string): Observable<string> {
+    return this.client.methodCall('new_system_group', [token]).pipe(
+      map<MethodResponse | MethodFault, string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Creating a new system group failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
   modify_item(
     what: string,
     objectId: string,
-    attribute: string,
-    arg: any,
+    attribute: Array<string>,
+    arg: AttributeValue,
     token: string,
   ): Observable<boolean> {
     return this.client
-      .methodCall('modify_item', [what, objectId, attribute, arg, token])
+      .methodCall('modify_item', [
+        what,
+        objectId,
+        attribute,
+        arg as unknown as XmlRpcStruct,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -2851,7 +3732,7 @@ export class CobblerApiService {
 
   modify_distro(
     objectId: string,
-    attribute: string,
+    attribute: Array<string>,
     arg: any,
     token: string,
   ): Observable<boolean> {
@@ -2878,7 +3759,7 @@ export class CobblerApiService {
 
   modify_profile(
     objectId: string,
-    attribute: string,
+    attribute: Array<string>,
     arg: any,
     token: string,
   ): Observable<boolean> {
@@ -2905,7 +3786,7 @@ export class CobblerApiService {
 
   modify_system(
     objectId: string,
-    attribute: string,
+    attribute: Array<string>,
     arg: any,
     token: string,
   ): Observable<boolean> {
@@ -2932,7 +3813,7 @@ export class CobblerApiService {
 
   modify_image(
     objectId: string,
-    attribute: string,
+    attribute: Array<string>,
     arg: any,
     token: string,
   ): Observable<boolean> {
@@ -2959,7 +3840,7 @@ export class CobblerApiService {
 
   modify_repo(
     objectId: string,
-    attribute: string,
+    attribute: Array<string>,
     arg: any,
     token: string,
   ): Observable<boolean> {
@@ -2984,6 +3865,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   modify_mgmtclass(
     objectId: string,
     attribute: string,
@@ -3011,6 +3893,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   modify_package(
     objectId: string,
     attribute: string,
@@ -3038,6 +3921,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   modify_file(
     objectId: string,
     attribute: string,
@@ -3067,7 +3951,7 @@ export class CobblerApiService {
 
   modify_menu(
     objectId: string,
-    attribute: string,
+    attribute: Array<string>,
     arg: any,
     token: string,
   ): Observable<boolean> {
@@ -3092,24 +3976,169 @@ export class CobblerApiService {
       );
   }
 
-  modify_setting(name: string, value: any, token: string): Observable<number> {
-    return this.client.methodCall('modify_setting', [name, value, token]).pipe(
-      map<MethodResponse | MethodFault, number>(
-        (data: MethodResponse | MethodFault) => {
-          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as number;
-          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-            throw new Error(
-              'Modifying the requested setting failed with code "' +
-                data.faultCode +
-                '" and error message "' +
-                data.faultString +
-                '"',
-            );
-          }
-        },
-      ),
-    );
+  modify_network_interface(
+    objectId: string,
+    attribute: Array<string>,
+    arg: any,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('modify_network_interface', [objectId, attribute, arg, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Modifying the requested network interface failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  modify_template(
+    objectId: string,
+    attribute: Array<string>,
+    arg: any,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('modify_template', [objectId, attribute, arg, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Modifying the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  modify_distro_group(
+    objectId: string,
+    attribute: Array<string>,
+    arg: any,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('modify_distro_group', [objectId, attribute, arg, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Modifying the requested distro group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  modify_profile_group(
+    objectId: string,
+    attribute: Array<string>,
+    arg: any,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('modify_profile_group', [objectId, attribute, arg, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Modifying the requested profile group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  modify_system_group(
+    objectId: string,
+    attribute: Array<string>,
+    arg: any,
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('modify_system_group', [objectId, attribute, arg, token])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Modifying the requested system group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  modify_setting(
+    name: string,
+    value: ModifyValue,
+    token: string,
+  ): Observable<number> {
+    return this.client
+      .methodCall('modify_setting', [
+        name,
+        value as unknown as XmlRpcStruct,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, number>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as number;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Modifying the requested setting failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
   }
 
   auto_add_repos(token: string): Observable<boolean> {
@@ -3132,6 +4161,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   xapi_object_edit(
     objectType: string,
     objectName: string,
@@ -3169,11 +4199,20 @@ export class CobblerApiService {
   save_item(
     what: string,
     objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
     token: string,
-    editmode = 'bypass',
   ): Observable<boolean> {
     return this.client
-      .methodCall('save_item', [what, objectId, token, editmode])
+      .methodCall('save_item', [
+        what,
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -3195,11 +4234,19 @@ export class CobblerApiService {
 
   save_distro(
     objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
     token: string,
-    editmode = 'bypass',
   ): Observable<boolean> {
     return this.client
-      .methodCall('save_distro', [objectId, token, editmode])
+      .methodCall('save_distro', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -3221,11 +4268,19 @@ export class CobblerApiService {
 
   save_profile(
     objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
     token: string,
-    editmode = 'bypass',
   ): Observable<boolean> {
     return this.client
-      .methodCall('save_profile', [objectId, token, editmode])
+      .methodCall('save_profile', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -3247,11 +4302,19 @@ export class CobblerApiService {
 
   save_system(
     objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
     token: string,
-    editmode = 'bypass',
   ): Observable<boolean> {
     return this.client
-      .methodCall('save_system', [objectId, token, editmode])
+      .methodCall('save_system', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -3273,11 +4336,19 @@ export class CobblerApiService {
 
   save_image(
     objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
     token: string,
-    editmode = 'bypass',
   ): Observable<boolean> {
     return this.client
-      .methodCall('save_image', [objectId, token, editmode])
+      .methodCall('save_image', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -3299,11 +4370,19 @@ export class CobblerApiService {
 
   save_repo(
     objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
     token: string,
-    editmode = 'bypass',
   ): Observable<boolean> {
     return this.client
-      .methodCall('save_repo', [objectId, token, editmode])
+      .methodCall('save_repo', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -3323,6 +4402,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   save_mgmtclass(
     objectId: string,
     token: string,
@@ -3349,6 +4429,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   save_package(
     objectId: string,
     token: string,
@@ -3375,6 +4456,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   save_file(
     objectId: string,
     token: string,
@@ -3403,11 +4485,19 @@ export class CobblerApiService {
 
   save_menu(
     objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
     token: string,
-    editmode = 'bypass',
   ): Observable<boolean> {
     return this.client
-      .methodCall('save_menu', [objectId, token, editmode])
+      .methodCall('save_menu', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -3427,6 +4517,177 @@ export class CobblerApiService {
       );
   }
 
+  save_network_interface(
+    objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('save_network_interface', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Saving the requested network interface failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  save_template(
+    objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('save_template', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Saving the requested template failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  save_distro_group(
+    objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('save_distro_group', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Saving the requested distro group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  save_profile_group(
+    objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('save_profile_group', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Saving the requested profile_group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  save_system_group(
+    objectId: string,
+    withTriggers = true,
+    withSync = true,
+    editMode = 'bypass',
+    token: string,
+  ): Observable<boolean> {
+    return this.client
+      .methodCall('save_system_group', [
+        objectId,
+        withTriggers,
+        withSync,
+        editMode,
+        token,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, boolean>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Saving the requested system_group failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  // Removed in main branch
   get_autoinstall_templates(token: string): Observable<Array<string>> {
     return this.client.methodCall('get_autoinstall_templates', [token]).pipe(
       map<MethodResponse | MethodFault, Array<any>>(
@@ -3450,6 +4711,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_autoinstall_snippets(token: string): Observable<Array<string>> {
     return this.client.methodCall('get_autoinstall_snippets', [token]).pipe(
       map<MethodResponse | MethodFault, Array<any>>(
@@ -3473,7 +4735,11 @@ export class CobblerApiService {
     );
   }
 
-  is_autoinstall_in_use(ai: string, token: string): Observable<boolean> {
+  is_autoinstall_in_use(
+    ai: string,
+    token: string,
+    rest?: RestValue,
+  ): Observable<boolean> {
     return this.client.methodCall('is_autoinstall_in_use', [ai, token]).pipe(
       map<MethodResponse | MethodFault, boolean>(
         (data: MethodResponse | MethodFault) => {
@@ -3493,9 +4759,21 @@ export class CobblerApiService {
     );
   }
 
-  generate_autoinstall(profile: string, system: string): Observable<string> {
+  generate_autoinstall(
+    objIdentifier: string,
+    objType = 'profile',
+    objField = 'name',
+    autoinstallerFile: string,
+    autoinstallerSubfile: string,
+  ): Observable<string> {
     return this.client
-      .methodCall('generate_autoinstall', [profile, system])
+      .methodCall('generate_autoinstall', [
+        objIdentifier,
+        objType,
+        objField,
+        autoinstallerFile,
+        autoinstallerSubfile,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, string>(
           (data: MethodResponse | MethodFault) => {
@@ -3515,6 +4793,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   generate_profile_autoinstall(profile: string): Observable<string> {
     return this.client
       .methodCall('generate_profile_autoinstall', [profile])
@@ -3537,6 +4816,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   generate_system_autoinstall(system: string): Observable<string> {
     return this.client.methodCall('generate_system_autoinstall', [system]).pipe(
       map<MethodResponse | MethodFault, string>(
@@ -3561,9 +4841,15 @@ export class CobblerApiService {
     profile: string,
     image: string,
     system: string,
+    rest?: RestValue,
   ): Observable<string> {
     return this.client
-      .methodCall('generate_ipxe', [profile, image, system])
+      .methodCall('generate_ipxe', [
+        profile,
+        image,
+        system,
+        rest as XmlRpcStruct,
+      ])
       .pipe(
         map<MethodResponse | MethodFault, string>(
           (data: MethodResponse | MethodFault) => {
@@ -3583,7 +4869,11 @@ export class CobblerApiService {
       );
   }
 
-  generate_bootcfg(profile: string, system: string): Observable<string> {
+  generate_bootcfg(
+    profile: string,
+    system: string,
+    rest?: RestValue,
+  ): Observable<string> {
     return this.client.methodCall('generate_bootcfg', [profile, system]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
@@ -3626,6 +4916,34 @@ export class CobblerApiService {
             }
           },
         ),
+      );
+  }
+
+  dump_vars(
+    itemUuid: string,
+    formattedOutput = false,
+    removeDicts = true,
+  ): Observable<Record<string, any> | string> {
+    return this.client
+      .methodCall('dump_vars', [itemUuid, formattedOutput, removeDicts])
+      .pipe(
+        map((data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            if (formattedOutput === true) {
+              return data.value as string;
+            }
+            return data.value as Record<string, any>;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Dumping vars failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+          throw new Error('Unexpected response type');
+        }),
       );
   }
 
@@ -3689,7 +5007,7 @@ export class CobblerApiService {
     return resultArray;
   }
 
-  get_settings(token: string): Observable<Settings> {
+  get_settings(token: string, rest?: RestValue): Observable<Settings> {
     return this.client.methodCall('get_settings', [token]).pipe(
       map<MethodResponse | MethodFault, Settings>(
         (data: MethodResponse | MethodFault) => {
@@ -3714,7 +5032,10 @@ export class CobblerApiService {
     );
   }
 
-  get_signatures(token: string): Observable<DistroSignatures> {
+  get_signatures(
+    token: string,
+    rest?: RestValue,
+  ): Observable<DistroSignatures> {
     return this.client.methodCall('get_signatures', [token]).pipe(
       map<MethodResponse | MethodFault, Map<string, XmlRpcTypes>>(
         (data: MethodResponse | MethodFault) => {
@@ -3766,7 +5087,7 @@ export class CobblerApiService {
     );
   }
 
-  get_valid_breeds(token: string): Observable<Array<any>> {
+  get_valid_breeds(token: string, rest?: RestValue): Observable<Array<string>> {
     return this.client.methodCall('get_valid_breeds', [token]).pipe(
       map<MethodResponse | MethodFault, Array<any>>(
         (data: MethodResponse | MethodFault) => {
@@ -3789,7 +5110,8 @@ export class CobblerApiService {
   get_valid_os_versions_for_breed(
     breed: string,
     token: string,
-  ): Observable<Array<any>> {
+    rest?: RestValue,
+  ): Observable<Array<string>> {
     return this.client
       .methodCall('get_valid_os_versions_for_breed', [breed, token])
       .pipe(
@@ -3811,7 +5133,7 @@ export class CobblerApiService {
       );
   }
 
-  get_valid_os_versions(token: string): Observable<Array<any>> {
+  get_valid_os_versions(token: string): Observable<Array<string>> {
     return this.client.methodCall('get_valid_os_versions', [token]).pipe(
       map<MethodResponse | MethodFault, Array<any>>(
         (data: MethodResponse | MethodFault) => {
@@ -3831,11 +5153,8 @@ export class CobblerApiService {
     );
   }
 
-  get_valid_archs(
-    systemName: string,
-    token: string,
-  ): Observable<Array<string>> {
-    return this.client.methodCall('get_valid_archs', [systemName, token]).pipe(
+  get_valid_archs(token: string): Observable<Array<string>> {
+    return this.client.methodCall('get_valid_archs', [token]).pipe(
       map<MethodResponse | MethodFault, Array<string>>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -3955,7 +5274,10 @@ export class CobblerApiService {
       );
   }
 
-  get_repo_config_for_profile(profileName: string): Observable<string> {
+  get_repo_config_for_profile(
+    profileName: string,
+    rest?: RestValue,
+  ): Observable<string> {
     return this.client
       .methodCall('get_repo_config_for_profile', [profileName])
       .pipe(
@@ -3977,7 +5299,10 @@ export class CobblerApiService {
       );
   }
 
-  get_repo_config_for_system(systemName: string): Observable<string> {
+  get_repo_config_for_system(
+    systemName: string,
+    rest?: RestValue,
+  ): Observable<string> {
     return this.client
       .methodCall('get_repo_config_for_system', [systemName])
       .pipe(
@@ -3999,29 +5324,10 @@ export class CobblerApiService {
       );
   }
 
-  get_templates(): Observable<string> {
-    return this.client.methodCall('get_templates').pipe(
-      map<MethodResponse | MethodFault, string>(
-        (data: MethodResponse | MethodFault) => {
-          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as string;
-          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-            throw new Error(
-              'Getting the requested templates failed with code "' +
-                data.faultCode +
-                '" and error message "' +
-                data.faultString +
-                '"',
-            );
-          }
-        },
-      ),
-    );
-  }
-
   get_template_file_for_profile(
     profileName: string,
     path: string,
+    rest?: RestValue,
   ): Observable<string> {
     return this.client
       .methodCall('get_template_file_for_profile', [profileName, path])
@@ -4047,6 +5353,7 @@ export class CobblerApiService {
   get_template_file_for_system(
     systemName: string,
     path: string,
+    rest?: RestValue,
   ): Observable<string> {
     return this.client
       .methodCall('get_template_file_for_system', [systemName, path])
@@ -4069,7 +5376,11 @@ export class CobblerApiService {
       );
   }
 
-  register_new_system(info: RegisterOptions): Observable<boolean> {
+  register_new_system(
+    info: RegisterOptions,
+    token: string,
+    rest?: RestValue,
+  ): Observable<boolean> {
     const transformedOptions: XmlRpcStruct = {
       members: [
         { name: 'name', value: info.name },
@@ -4079,7 +5390,7 @@ export class CobblerApiService {
       ],
     };
     return this.client
-      .methodCall('register_new_system', [transformedOptions])
+      .methodCall('register_new_system', [transformedOptions, token])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -4099,7 +5410,11 @@ export class CobblerApiService {
       );
   }
 
-  disable_netboot(name: string, token: string): Observable<boolean> {
+  disable_netboot(
+    name: string,
+    token: string,
+    rest?: RestValue,
+  ): Observable<boolean> {
     return this.client.methodCall('disable_netboot', [name, token]).pipe(
       map<MethodResponse | MethodFault, boolean>(
         (data: MethodResponse | MethodFault) => {
@@ -4121,10 +5436,10 @@ export class CobblerApiService {
 
   upload_log_data(
     sysName: string,
-    file: any,
-    size: any,
-    offset: any,
-    data: any,
+    file: string,
+    size: number,
+    offset: number,
+    data = 'xmlrpc.client.Binary',
     token: string,
   ): Observable<boolean> {
     return this.client
@@ -4152,13 +5467,14 @@ export class CobblerApiService {
 
   run_install_triggers(
     mode: string,
-    objtype: string,
+    objType: string,
     name: string,
-    ip: any,
+    ip: string,
     token: string,
+    rest?: RestValue,
   ): Observable<boolean> {
     return this.client
-      .methodCall('run_install_triggers', [mode, objtype, name, ip, token])
+      .methodCall('run_install_triggers', [mode, objType, name, ip, token])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
           (data: MethodResponse | MethodFault) => {
@@ -4178,7 +5494,7 @@ export class CobblerApiService {
       );
   }
 
-  version(): Observable<number> {
+  version(rest?: RestValue): Observable<number> {
     return this.client.methodCall('version').pipe(
       map<MethodResponse | MethodFault, number>(
         (data: MethodResponse | MethodFault) => {
@@ -4198,7 +5514,7 @@ export class CobblerApiService {
     );
   }
 
-  extended_version(): Observable<ExtendedVersion> {
+  extended_version(rest?: RestValue): Observable<ExtendedVersion> {
     return this.client.methodCall('extended_version').pipe(
       map<MethodResponse | MethodFault, Map<string, any>>(
         (data: MethodResponse | MethodFault) => {
@@ -4232,12 +5548,12 @@ export class CobblerApiService {
     );
   }
 
-  get_distros_since(mtime: number): Observable<object> {
+  get_distros_since(mtime: number): Observable<ResolvedValue> {
     return this.client.methodCall('get_distros_since', [mtime]).pipe(
-      map<MethodResponse | MethodFault, object>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as object;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the distros modified since the requested mtime failed with code "' +
@@ -4252,12 +5568,12 @@ export class CobblerApiService {
     );
   }
 
-  get_profiles_since(mtime: number): Observable<object> {
+  get_profiles_since(mtime: number): Observable<ResolvedValue> {
     return this.client.methodCall('get_profiles_since', [mtime]).pipe(
-      map<MethodResponse | MethodFault, object>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as object;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the profiles modified since the requested mtime failed with code "' +
@@ -4272,12 +5588,12 @@ export class CobblerApiService {
     );
   }
 
-  get_systems_since(mtime: number): Observable<object> {
+  get_systems_since(mtime: number): Observable<ResolvedValue> {
     return this.client.methodCall('get_systems_since', [mtime]).pipe(
-      map<MethodResponse | MethodFault, object>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as object;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the systems modified since the requested mtime failed with code "' +
@@ -4292,12 +5608,12 @@ export class CobblerApiService {
     );
   }
 
-  get_repos_since(mtime: number): Observable<object> {
+  get_repos_since(mtime: number): Observable<ResolvedValue> {
     return this.client.methodCall('get_repos_since', [mtime]).pipe(
-      map<MethodResponse | MethodFault, object>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as object;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the repositories modified since the requested mtime failed with code "' +
@@ -4312,12 +5628,12 @@ export class CobblerApiService {
     );
   }
 
-  get_images_since(mtime: number): Observable<object> {
+  get_images_since(mtime: number): Observable<ResolvedValue> {
     return this.client.methodCall('get_images_since', [mtime]).pipe(
-      map<MethodResponse | MethodFault, object>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as object;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the images modified since the requested mtime failed with code "' +
@@ -4332,6 +5648,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_mgmtclasses_since(mtime: number): Observable<object> {
     return this.client.methodCall('get_mgmtclasses_since', [mtime]).pipe(
       map<MethodResponse | MethodFault, object>(
@@ -4352,6 +5669,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_packages_since(mtime: number): Observable<object> {
     return this.client.methodCall('get_packages_since', [mtime]).pipe(
       map<MethodResponse | MethodFault, object>(
@@ -4372,6 +5690,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_files_since(mtime: number): Observable<object> {
     return this.client.methodCall('get_files_since', [mtime]).pipe(
       map<MethodResponse | MethodFault, object>(
@@ -4392,12 +5711,12 @@ export class CobblerApiService {
     );
   }
 
-  get_menus_since(mtime: number): Observable<object> {
+  get_menus_since(mtime: number): Observable<ResolvedValue> {
     return this.client.methodCall('get_menus_since', [mtime]).pipe(
-      map<MethodResponse | MethodFault, object>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as object;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the menus modified since the requested mtime failed with code "' +
@@ -4412,17 +5731,118 @@ export class CobblerApiService {
     );
   }
 
+  get_network_interfaces_since(mtime: number): Observable<ResolvedValue> {
+    return this.client.methodCall('get_network_interfaces_since', [mtime]).pipe(
+      map<MethodResponse | MethodFault, ResolvedValue>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as ResolvedValue;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the network interfaces modified since the requested mtime failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_templates_since(mtime: number): Observable<ResolvedValue> {
+    return this.client.methodCall('get_templates_since', [mtime]).pipe(
+      map<MethodResponse | MethodFault, ResolvedValue>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as ResolvedValue;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the templates modified since the requested mtime failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_distro_groups_since(mtime: number): Observable<ResolvedValue> {
+    return this.client.methodCall('get_distro_groups_since', [mtime]).pipe(
+      map<MethodResponse | MethodFault, ResolvedValue>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as ResolvedValue;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the distro groups modified since the requested mtime failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_profile_groups_since(mtime: number): Observable<ResolvedValue> {
+    return this.client.methodCall('get_profile_groups_since', [mtime]).pipe(
+      map<MethodResponse | MethodFault, ResolvedValue>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as ResolvedValue;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the profile groups modified since the requested mtime failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  get_system_groups_since(mtime: number): Observable<ResolvedValue> {
+    return this.client.methodCall('get_system_groups_since', [mtime]).pipe(
+      map<MethodResponse | MethodFault, ResolvedValue>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as ResolvedValue;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Getting the system groups modified since the requested mtime failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+        },
+      ),
+    );
+  }
+
   get_repos_compatible_with_profile(
     profile: string,
     token: string,
-  ): Observable<string> {
+    rest?: RestValue,
+  ): Observable<Array<Record<any, any>>> {
     return this.client
       .methodCall('get_repos_compatible_with_profile', [profile, token])
       .pipe(
-        map<MethodResponse | MethodFault, string>(
+        map<MethodResponse | MethodFault, Array<Record<any, any>>>(
           (data: MethodResponse | MethodFault) => {
             if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as string;
+              return data.value as Array<Record<any, any>>;
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Getting the repositories compatible with the requested profile failed with code "' +
@@ -4437,12 +5857,12 @@ export class CobblerApiService {
       );
   }
 
-  find_system_by_dns_name(dnsName: string): Observable<object> {
+  find_system_by_dns_name(dnsName: string): Observable<Record<string, any>> {
     return this.client.methodCall('find_system_by_dns_name', [dnsName]).pipe(
-      map<MethodResponse | MethodFault, object>(
+      map<MethodResponse | MethodFault, Record<string, any>>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as object;
+            return data.value as Record<string, any>;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Finding a system by its DNS name failed with code "' +
@@ -4460,12 +5880,13 @@ export class CobblerApiService {
   get_distro_as_rendered(
     name: string,
     token: string,
-  ): Observable<Map<string, any>> {
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
     return this.client.methodCall('get_distro_as_rendered', [name, token]).pipe(
-      map<MethodResponse | MethodFault, Map<string, any>>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as Map<string, any>;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the requested distro in a rendered format failed with code "' +
@@ -4483,14 +5904,15 @@ export class CobblerApiService {
   get_profile_as_rendered(
     name: string,
     token: string,
-  ): Observable<Map<string, any>> {
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
     return this.client
       .methodCall('get_profile_as_rendered', [name, token])
       .pipe(
-        map<MethodResponse | MethodFault, Map<string, any>>(
+        map<MethodResponse | MethodFault, ResolvedValue>(
           (data: MethodResponse | MethodFault) => {
             if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as Map<string, any>;
+              return data.value as ResolvedValue;
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Getting the requested profile in a rendered format failed with code "' +
@@ -4508,12 +5930,13 @@ export class CobblerApiService {
   get_system_as_rendered(
     name: string,
     token: string,
-  ): Observable<Map<string, any>> {
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
     return this.client.methodCall('get_system_as_rendered', [name, token]).pipe(
-      map<MethodResponse | MethodFault, Map<string, any>>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as Map<string, any>;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the requested system in a rendered format failed with code "' +
@@ -4531,12 +5954,13 @@ export class CobblerApiService {
   get_repo_as_rendered(
     name: string,
     token: string,
-  ): Observable<Map<string, any>> {
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
     return this.client.methodCall('get_repo_as_rendered', [name, token]).pipe(
-      map<MethodResponse | MethodFault, Map<string, any>>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as Map<string, any>;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the requested repository in a rendered format failed with code "' +
@@ -4554,12 +5978,13 @@ export class CobblerApiService {
   get_image_as_rendered(
     name: string,
     token: string,
-  ): Observable<Map<string, any>> {
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
     return this.client.methodCall('get_image_as_rendered', [name, token]).pipe(
-      map<MethodResponse | MethodFault, Map<string, any>>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as Map<string, any>;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the requested image in a rendered format failed with code "' +
@@ -4574,6 +5999,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   get_mgmtclass_as_rendered(
     name: string,
     token: string,
@@ -4599,6 +6025,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   get_package_as_rendered(
     name: string,
     token: string,
@@ -4624,6 +6051,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   get_file_as_rendered(
     name: string,
     token: string,
@@ -4650,12 +6078,13 @@ export class CobblerApiService {
   get_menu_as_rendered(
     name: string,
     token: string,
-  ): Observable<Map<string, any>> {
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
     return this.client.methodCall('get_menu_as_rendered', [name, token]).pipe(
-      map<MethodResponse | MethodFault, Map<string, any>>(
+      map<MethodResponse | MethodFault, ResolvedValue>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as Map<string, any>;
+            return data.value as ResolvedValue;
           } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the requested menu in a rendered format failed with code "' +
@@ -4670,8 +6099,90 @@ export class CobblerApiService {
     );
   }
 
-  get_random_mac(virtType: string): Observable<string> {
-    return this.client.methodCall('get_random_mac', [virtType]).pipe(
+  get_distro_group_as_rendered(
+    name: string,
+    token: string,
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
+    return this.client
+      .methodCall('get_distro_group_as_rendered', [name, token])
+      .pipe(
+        map<MethodResponse | MethodFault, ResolvedValue>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as ResolvedValue;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Getting the requested distro group in a rendered format failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  get_profile_group_as_rendered(
+    name: string,
+    token: string,
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
+    return this.client
+      .methodCall('get_profile_group_as_rendered', [name, token])
+      .pipe(
+        map<MethodResponse | MethodFault, ResolvedValue>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as ResolvedValue;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Getting the requested profile group in a rendered format failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  get_system_group_as_rendered(
+    name: string,
+    token: string,
+    rest?: RestValue,
+  ): Observable<ResolvedValue> {
+    return this.client
+      .methodCall('get_system_group_as_rendered', [name, token])
+      .pipe(
+        map<MethodResponse | MethodFault, ResolvedValue>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as ResolvedValue;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Getting the requested system group in a rendered format failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  get_random_mac(
+    virtType = 'kvm',
+    token: string,
+    rest?: RestValue,
+  ): Observable<string> {
+    return this.client.methodCall('get_random_mac', [virtType, token]).pipe(
       map<MethodResponse | MethodFault, string>(
         (data: MethodResponse | MethodFault) => {
           if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
@@ -4690,29 +6201,34 @@ export class CobblerApiService {
     );
   }
 
-  xmlrpc_hacks(data: any): Observable<any> {
-    return this.client.methodCall('xmlrpc_hacks', [data]).pipe(
-      map<MethodResponse | MethodFault, any>(
-        (responseData: MethodResponse | MethodFault) => {
-          if (AngularXmlrpcService.instanceOfMethodResponse(responseData)) {
-            return responseData.value;
-          } else if (AngularXmlrpcService.instanceOfMethodFault(responseData)) {
-            throw new Error(
-              'Executing the XML-RPC hacks failed with code "' +
-                responseData.faultCode +
-                '" and error message "' +
-                responseData.faultString +
-                '"',
-            );
-          }
-        },
-      ),
-    );
+  xmlrpc_hacks(data: XmlrpcHacksInput): Observable<ResolvedValue> {
+    return this.client
+      .methodCall('xmlrpc_hacks', [data as unknown as XmlRpcStruct])
+      .pipe(
+        map<MethodResponse | MethodFault, ResolvedValue>(
+          (responseData: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(responseData)) {
+              return responseData.value as ResolvedValue;
+            } else if (
+              AngularXmlrpcService.instanceOfMethodFault(responseData)
+            ) {
+              throw new Error(
+                'Executing the XML-RPC hacks failed with code "' +
+                  responseData.faultCode +
+                  '" and error message "' +
+                  responseData.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
   }
 
   get_status(
-    mode: string,
+    mode = 'normal',
     token: string,
+    rest?: RestValue,
   ): Observable<Array<InstallationStatus>> {
     return this.client.methodCall('get_status', [mode, token]).pipe(
       map<MethodResponse | MethodFault, Map<string, any>>(
@@ -4754,16 +6270,16 @@ export class CobblerApiService {
   check_access_no_fail(
     token: string,
     resource: string,
-    arg1: any,
+    arg1: string,
     arg2: any,
-  ): Observable<boolean> {
+  ): Observable<number> {
     return this.client
       .methodCall('check_access_no_fail', [token, resource, arg1, arg2])
       .pipe(
-        map<MethodResponse | MethodFault, boolean>(
+        map<MethodResponse | MethodFault, number>(
           (data: MethodResponse | MethodFault) => {
             if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as boolean;
+              return data.value as number;
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Checking the access without failure failed with code "' +
@@ -4781,16 +6297,16 @@ export class CobblerApiService {
   check_access(
     token: string,
     resource: string,
-    arg1: any,
+    arg1: string,
     arg2: any,
-  ): Observable<boolean> {
+  ): Observable<number> {
     return this.client
       .methodCall('check_access', [token, resource, arg1, arg2])
       .pipe(
-        map<MethodResponse | MethodFault, boolean>(
+        map<MethodResponse | MethodFault, number>(
           (data: MethodResponse | MethodFault) => {
             if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as boolean;
+              return data.value as number;
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Checking the access failed with code "' +
@@ -4925,6 +6441,7 @@ export class CobblerApiService {
     );
   }
 
+  // Removed in main branch
   read_autoinstall_template(
     filePath: string,
     token: string,
@@ -4950,6 +6467,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   write_autoinstall_template(
     filePath: string,
     data: string,
@@ -4978,6 +6496,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   read_autoinstall_snippet(
     filePath: string,
     token: string,
@@ -5003,6 +6522,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   write_autoinstall_snippet(
     filePath: string,
     data: string,
@@ -5031,6 +6551,7 @@ export class CobblerApiService {
       );
   }
 
+  // Removed in main branch
   remove_autoinstall_snippet(
     filePath: string,
     token: string,
@@ -5094,5 +6615,36 @@ export class CobblerApiService {
         },
       ),
     );
+  }
+
+  input_string_or_list_no_inherit(
+    options: string | Array<any>,
+  ): Observable<Array<any>> {
+    return this.client
+      .methodCall('input_string_or_list_no_inherit', [options])
+      .pipe(
+        map<MethodResponse | MethodFault, Array<any>>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as Array<any>;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Converting input string or list no inherit failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+          },
+        ),
+      );
+  }
+
+  input_string_or_dict(
+    options: string | Array<any> | Record<any, any>,
+    allowMultiples = true,
+  ): Observable<string | Record<any, any>> {
+    return this.client.methodCall('input_string_or_dict');
   }
 }
