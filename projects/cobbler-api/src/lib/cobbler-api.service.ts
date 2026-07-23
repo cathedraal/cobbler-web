@@ -14,19 +14,11 @@ import { COBBLER_URL } from './lib.config';
 import {
   Distro,
   Image,
-  Mgmgtclass,
-  Package,
   Profile,
   Repo,
   System,
-  File,
   Menu,
-  ResolvedValue,
   NetworkInterface,
-  AttributeValue,
-  ModifyValue,
-  RestValue,
-  XmlrpcHacksInput,
 } from './custom-types/items';
 import {
   BackgroundAclSetupOptions,
@@ -45,6 +37,14 @@ import {
   Version,
 } from './custom-types/misc';
 import { DistroSignatures } from './custom-types/signatures';
+import {
+  RestValue,
+  XmlrpcHacksInput,
+  AttributeValue,
+  ResolvedValue,
+  ModifyValue,
+  TftpFileResult,
+} from './custom-types/types';
 
 // TODO: Investigate on server side to build and receive well known interfaces, not just plain objects.
 
@@ -81,6 +81,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -120,6 +121,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -153,6 +155,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -182,6 +185,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -213,6 +217,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -236,6 +241,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -259,6 +265,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -285,6 +292,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -325,6 +333,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -362,6 +371,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -395,6 +405,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -426,6 +437,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -452,6 +464,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -478,6 +491,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -504,6 +518,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -530,6 +545,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -555,6 +571,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -575,6 +592,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
       map<Map<string, any>, Array<Event>>((data: Map<string, any>) => {
@@ -610,6 +628,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -630,6 +649,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
       map<Array<any>, Event>((data: Array<any>) => {
@@ -660,6 +680,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -680,6 +701,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -700,6 +722,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -746,6 +769,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -777,6 +801,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -808,6 +833,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -839,6 +865,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -870,6 +897,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -901,6 +929,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -932,6 +961,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -963,6 +993,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -985,6 +1016,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1008,6 +1040,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1033,6 +1066,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1063,6 +1097,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1093,6 +1128,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1123,6 +1159,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1153,6 +1190,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1183,6 +1221,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1213,6 +1252,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1243,6 +1283,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1263,6 +1304,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1300,6 +1342,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1333,6 +1376,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1366,6 +1410,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1399,6 +1444,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1432,6 +1478,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1465,30 +1512,7 @@ export class CobblerApiService {
                   '"',
               );
             }
-          },
-        ),
-      );
-  }
-
-  // Removed in main branch
-  find_file(criteria: object, expand: boolean): Observable<Array<File>> {
-    return this.client
-      .methodCall('find_file', [criteria as XmlRpcStruct, expand])
-      .pipe(
-        map<MethodResponse | MethodFault, Array<File>>(
-          (data: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              // FIXME: Make the cast without the unknown possible
-              return data.value as unknown as Array<File>;
-            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-              throw new Error(
-                'Finding the requested files failed with code "' +
-                  data.faultCode +
-                  '" and error message "' +
-                  data.faultString +
-                  '"',
-              );
-            }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1522,6 +1546,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1554,6 +1579,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1586,6 +1612,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1623,6 +1650,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1643,6 +1671,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1667,6 +1696,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1687,6 +1717,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1707,6 +1738,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1727,6 +1759,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1747,6 +1780,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1767,6 +1801,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1787,6 +1822,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1806,6 +1842,7 @@ export class CobblerApiService {
                 data.faultString,
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1825,6 +1862,7 @@ export class CobblerApiService {
                 data.faultString,
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1845,6 +1883,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1865,6 +1904,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1885,6 +1925,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -1912,6 +1953,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1938,6 +1980,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1964,6 +2007,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -1990,6 +2034,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2014,6 +2059,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2040,6 +2086,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2064,6 +2111,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2090,6 +2138,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2116,6 +2165,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2142,6 +2192,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2168,6 +2219,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2194,6 +2246,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2221,6 +2274,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2247,6 +2301,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2273,6 +2328,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2299,6 +2355,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2323,6 +2380,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2349,6 +2407,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2373,6 +2432,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2399,6 +2459,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2425,6 +2486,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2451,6 +2513,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2477,6 +2540,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2503,6 +2567,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2530,6 +2595,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2556,6 +2622,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2582,6 +2649,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2608,6 +2676,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2634,6 +2703,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2660,6 +2730,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2686,6 +2757,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2712,6 +2784,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2738,6 +2811,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2764,6 +2838,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2790,6 +2865,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2816,6 +2892,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -2841,6 +2918,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2861,6 +2939,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2881,6 +2960,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2901,6 +2981,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2921,6 +3002,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2941,6 +3023,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2961,6 +3044,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -2981,6 +3065,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -3003,6 +3088,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3023,6 +3109,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -3043,6 +3130,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -3063,6 +3151,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -3083,6 +3172,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -3117,6 +3207,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3144,6 +3235,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3171,6 +3263,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3198,6 +3291,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3225,6 +3319,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3252,6 +3347,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3279,6 +3375,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3306,6 +3403,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3333,6 +3431,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3360,6 +3459,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3387,6 +3487,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3414,6 +3515,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3444,6 +3546,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3464,44 +3567,10 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
-  }
-
-  // Removed in main branch
-  xapi_object_edit(
-    objectType: string,
-    objectName: string,
-    editType: string,
-    attributes: XmlRpcStruct,
-    token: string,
-  ): Observable<boolean> {
-    return this.client
-      .methodCall('xapi_object_edit', [
-        objectType,
-        objectName,
-        editType,
-        attributes,
-        token,
-      ])
-      .pipe(
-        map<MethodResponse | MethodFault, boolean>(
-          (data: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as boolean;
-            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-              throw new Error(
-                'xapi_object_edit failed with code "' +
-                  data.faultCode +
-                  '" and error message "' +
-                  data.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
   }
 
   save_item(
@@ -3535,6 +3604,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3569,6 +3639,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3603,6 +3674,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3637,6 +3709,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3671,6 +3744,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3705,6 +3779,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3739,6 +3814,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3773,6 +3849,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3807,6 +3884,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3841,6 +3919,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3875,6 +3954,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -3909,57 +3989,10 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
-  }
-
-  // Removed in main branch
-  get_autoinstall_templates(token: string): Observable<Array<string>> {
-    return this.client.methodCall('get_autoinstall_templates', [token]).pipe(
-      map<MethodResponse | MethodFault, Array<any>>(
-        (data: MethodResponse | MethodFault) => {
-          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            if (!(data.value instanceof Array)) {
-              throw new Error('Expected Array!');
-            }
-            return data.value as Array<string>;
-          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-            throw new Error(
-              'Getting the requested auto-installation templates failed with code "' +
-                data.faultCode +
-                '" and error message "' +
-                data.faultString +
-                '"',
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  // Removed in main branch
-  get_autoinstall_snippets(token: string): Observable<Array<string>> {
-    return this.client.methodCall('get_autoinstall_snippets', [token]).pipe(
-      map<MethodResponse | MethodFault, Array<any>>(
-        (data: MethodResponse | MethodFault) => {
-          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            if (!(data.value instanceof Array)) {
-              throw new Error('Expected Array!');
-            }
-            return data.value as Array<string>;
-          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-            throw new Error(
-              'Getting the requested auto-installation snippets failed with code "' +
-                data.faultCode +
-                '" and error message "' +
-                data.faultString +
-                '"',
-            );
-          }
-        },
-      ),
-    );
   }
 
   is_autoinstall_in_use(
@@ -3981,6 +4014,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4015,53 +4049,10 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
-  }
-
-  // Removed in main branch
-  generate_profile_autoinstall(profile: string): Observable<string> {
-    return this.client
-      .methodCall('generate_profile_autoinstall', [profile])
-      .pipe(
-        map<MethodResponse | MethodFault, string>(
-          (data: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as string;
-            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-              throw new Error(
-                'Generating the auto-installation for the requested profile failed with code "' +
-                  data.faultCode +
-                  '" and error message "' +
-                  data.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
-  }
-
-  // Removed in main branch
-  generate_system_autoinstall(system: string): Observable<string> {
-    return this.client.methodCall('generate_system_autoinstall', [system]).pipe(
-      map<MethodResponse | MethodFault, string>(
-        (data: MethodResponse | MethodFault) => {
-          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-            return data.value as string;
-          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-            throw new Error(
-              'Generating the auto-installation for the requested system failed with code "' +
-                data.faultCode +
-                '" and error message "' +
-                data.faultString +
-                '"',
-            );
-          }
-        },
-      ),
-    );
   }
 
   generate_ipxe(
@@ -4091,6 +4082,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4115,6 +4107,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4141,6 +4134,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4177,18 +4171,19 @@ export class CobblerApiService {
   get_blended_data(profile: string, system: string): Observable<any> {
     return this.client.methodCall('get_blended_data', [profile, system]).pipe(
       map<MethodResponse | MethodFault, any>(
-        (responseData: MethodResponse | MethodFault) => {
-          if (AngularXmlrpcService.instanceOfMethodResponse(responseData)) {
-            return responseData.value;
-          } else if (AngularXmlrpcService.instanceOfMethodFault(responseData)) {
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
             throw new Error(
               'Getting the blended data for the requested profile or system failed with code "' +
-                responseData.faultCode +
+                data.faultCode +
                 '" and error message "' +
-                responseData.faultString +
+                data.faultString +
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4254,6 +4249,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4277,6 +4273,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
       map<Map<string, XmlRpcTypes>, DistroSignatures>(
@@ -4329,6 +4326,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4355,6 +4353,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4375,6 +4374,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4396,6 +4396,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4421,6 +4422,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4446,6 +4448,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4471,6 +4474,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4496,6 +4500,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4521,6 +4526,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4546,6 +4552,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4572,6 +4579,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4598,6 +4606,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4632,6 +4641,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4656,6 +4666,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4673,20 +4684,19 @@ export class CobblerApiService {
       .methodCall('upload_log_data', [sysName, file, size, offset, data, token])
       .pipe(
         map<MethodResponse | MethodFault, boolean>(
-          (responseData: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(responseData)) {
-              return responseData.value as boolean;
-            } else if (
-              AngularXmlrpcService.instanceOfMethodFault(responseData)
-            ) {
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as boolean;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Uploading the log data failed with code "' +
-                  responseData.faultCode +
+                  data.faultCode +
                   '" and error message "' +
-                  responseData.faultString +
+                  data.faultString +
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4716,6 +4726,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -4736,6 +4747,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4756,6 +4768,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
       map<Map<string, any>, ExtendedVersion>((data: Map<string, any>) => {
@@ -4790,6 +4803,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4810,6 +4824,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4830,6 +4845,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4850,6 +4866,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4870,6 +4887,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4890,6 +4908,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4910,6 +4929,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4930,6 +4950,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4950,6 +4971,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4970,6 +4992,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4990,6 +5013,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -4999,14 +5023,14 @@ export class CobblerApiService {
     profile: string,
     token: string,
     rest?: RestValue,
-  ): Observable<Array<Record<any, any>>> {
+  ): Observable<Array<Record<string, unknown>>> {
     return this.client
       .methodCall('get_repos_compatible_with_profile', [profile, token])
       .pipe(
-        map<MethodResponse | MethodFault, Array<Record<any, any>>>(
+        map<MethodResponse | MethodFault, Array<Record<string, unknown>>>(
           (data: MethodResponse | MethodFault) => {
             if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as Array<Record<any, any>>;
+              return data.value as Array<Record<string, unknown>>;
             } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Getting the repositories compatible with the requested profile failed with code "' +
@@ -5016,6 +5040,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5036,6 +5061,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5060,6 +5086,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5086,6 +5113,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5110,6 +5138,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5134,6 +5163,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5158,6 +5188,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5182,6 +5213,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5208,6 +5240,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5234,6 +5267,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5260,6 +5294,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5284,6 +5319,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5294,20 +5330,19 @@ export class CobblerApiService {
       .methodCall('xmlrpc_hacks', [data as unknown as XmlRpcStruct])
       .pipe(
         map<MethodResponse | MethodFault, ResolvedValue>(
-          (responseData: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(responseData)) {
-              return responseData.value as ResolvedValue;
-            } else if (
-              AngularXmlrpcService.instanceOfMethodFault(responseData)
-            ) {
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as ResolvedValue;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
               throw new Error(
                 'Executing the XML-RPC hacks failed with code "' +
-                  responseData.faultCode +
+                  data.faultCode +
                   '" and error message "' +
-                  responseData.faultString +
+                  data.faultString +
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5332,6 +5367,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
       map<Map<string, any>, Array<InstallationStatus>>(
@@ -5377,6 +5413,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5404,6 +5441,7 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
           },
         ),
       );
@@ -5424,6 +5462,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5444,6 +5483,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5464,6 +5504,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5484,6 +5525,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5504,6 +5546,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5524,145 +5567,10 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
-  }
-
-  // Removed in main branch
-  read_autoinstall_template(
-    filePath: string,
-    token: string,
-  ): Observable<string> {
-    return this.client
-      .methodCall('read_autoinstall_template', [filePath, token])
-      .pipe(
-        map<MethodResponse | MethodFault, string>(
-          (data: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as string;
-            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-              throw new Error(
-                'Reading the auto-installation template failed with code "' +
-                  data.faultCode +
-                  '" and error message "' +
-                  data.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
-  }
-
-  // Removed in main branch
-  write_autoinstall_template(
-    filePath: string,
-    data: string,
-    token: string,
-  ): Observable<boolean> {
-    return this.client
-      .methodCall('write_autoinstall_template', [filePath, data, token])
-      .pipe(
-        map<MethodResponse | MethodFault, boolean>(
-          (responseData: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(responseData)) {
-              return responseData.value as boolean;
-            } else if (
-              AngularXmlrpcService.instanceOfMethodFault(responseData)
-            ) {
-              throw new Error(
-                'Writing the auto-installation template failed with code "' +
-                  responseData.faultCode +
-                  '" and error message "' +
-                  responseData.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
-  }
-
-  // Removed in main branch
-  read_autoinstall_snippet(
-    filePath: string,
-    token: string,
-  ): Observable<string> {
-    return this.client
-      .methodCall('read_autoinstall_snippet', [filePath, token])
-      .pipe(
-        map<MethodResponse | MethodFault, string>(
-          (data: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as string;
-            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-              throw new Error(
-                'Reading the auto-installation snippet failed with code "' +
-                  data.faultCode +
-                  '" and error message "' +
-                  data.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
-  }
-
-  // Removed in main branch
-  write_autoinstall_snippet(
-    filePath: string,
-    data: string,
-    token: string,
-  ): Observable<boolean> {
-    return this.client
-      .methodCall('write_autoinstall_snippet', [filePath, data, token])
-      .pipe(
-        map<MethodResponse | MethodFault, boolean>(
-          (responseData: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(responseData)) {
-              return responseData.value as boolean;
-            } else if (
-              AngularXmlrpcService.instanceOfMethodFault(responseData)
-            ) {
-              throw new Error(
-                'Writing the auto-installation snippet failed with code "' +
-                  responseData.faultCode +
-                  '" and error message "' +
-                  responseData.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
-  }
-
-  // Removed in main branch
-  remove_autoinstall_snippet(
-    filePath: string,
-    token: string,
-  ): Observable<boolean> {
-    return this.client
-      .methodCall('remove_autoinstall_snippet', [filePath, token])
-      .pipe(
-        map<MethodResponse | MethodFault, boolean>(
-          (data: MethodResponse | MethodFault) => {
-            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
-              return data.value as boolean;
-            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
-              throw new Error(
-                'Removing the auto-installation snippet failed with code "' +
-                  data.faultCode +
-                  '" and error message "' +
-                  data.faultString +
-                  '"',
-              );
-            }
-          },
-        ),
-      );
   }
 
   get_config_data(hostname: string): Observable<string> {
@@ -5680,6 +5588,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5700,6 +5609,7 @@ export class CobblerApiService {
                 '"',
             );
           }
+          throw new Error('Unexpected response type');
         },
       ),
     );
@@ -5724,15 +5634,221 @@ export class CobblerApiService {
                   '"',
               );
             }
+            throw new Error('Unexpected response type');
+          },
+        ),
+      );
+  }
+
+  input_string_or_list(
+    options: string | Array<any>,
+  ): Observable<Array<any> | string> {
+    return this.client.methodCall('input_string_or_list', [options]).pipe(
+      map<MethodResponse | MethodFault, Array<any> | string>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as Array<any> | string;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Converting input string or list failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+          throw new Error('Unexpected response type');
+        },
+      ),
+    );
+  }
+
+  input_string_or_dict_no_inherit(
+    options: string | Array<any> | Record<string, unknown>,
+    allowMultiples = true,
+  ): Observable<string | Record<string, unknown>> {
+    return this.client
+      .methodCall('input_string_or_dict_no_inherit', [
+        options as unknown as XmlRpcStruct,
+        allowMultiples,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, string | Record<string, unknown>>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as string | Record<string, unknown>;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Converting input string or dictionary no inherit failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString,
+              );
+            }
+            throw new Error('Unexpected response type');
           },
         ),
       );
   }
 
   input_string_or_dict(
-    options: string | Array<any> | Record<any, any>,
+    options: string | Array<any> | Record<string, unknown>,
     allowMultiples = true,
-  ): Observable<string | Record<any, any>> {
-    return this.client.methodCall('input_string_or_dict');
+  ): Observable<string | Record<string, unknown>> {
+    return this.client
+      .methodCall('input_string_or_dict', [
+        options as unknown as XmlRpcStruct,
+        allowMultiples,
+      ])
+      .pipe(
+        map<MethodResponse | MethodFault, string | Record<string, unknown>>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as string | Record<string, unknown>;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Converting input string or dictionary failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString,
+              );
+            }
+            throw new Error('Unexpected response type');
+          },
+        ),
+      );
+  }
+
+  input_boolean(value: string | boolean | number): Observable<boolean> {
+    return this.client.methodCall('input_boolean', [value]).pipe(
+      map<MethodResponse | MethodFault, boolean>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as boolean;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Converting input boolean failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+          throw new Error('Unexpected response type');
+        },
+      ),
+    );
+  }
+
+  input_int(value: string | number): Observable<number> {
+    return this.client.methodCall('input_int', [value]).pipe(
+      map<MethodResponse | MethodFault, number>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as number;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Converting input integer failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+          throw new Error('Unexpected response type');
+        },
+      ),
+    );
+  }
+
+  get_tftp_file(
+    path: string,
+    offset: number,
+    size: number,
+    token: string,
+  ): Observable<TftpFileResult> {
+    return this.client
+      .methodCall('get_tftp_file', [path, offset, size, token])
+      .pipe(
+        map<MethodResponse | MethodFault, TftpFileResult>(
+          (data: MethodResponse | MethodFault) => {
+            if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+              return data.value as TftpFileResult;
+            } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+              throw new Error(
+                'Getting the requested TFTP file failed with code "' +
+                  data.faultCode +
+                  '" and error message "' +
+                  data.faultString +
+                  '"',
+              );
+            }
+            throw new Error('Unexpected response type');
+          },
+        ),
+      );
+  }
+
+  transaction_begin(token: string): Observable<boolean> {
+    return this.client.methodCall('transaction_begin', [token]).pipe(
+      map<MethodResponse | MethodFault, boolean>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as boolean;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Beginning the transaction failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+          throw new Error('Unexpected response type');
+        },
+      ),
+    );
+  }
+
+  transaction_commit(token: string): Observable<boolean> {
+    return this.client.methodCall('transaction_commit', [token]).pipe(
+      map<MethodResponse | MethodFault, boolean>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as boolean;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Commiting the current transaction failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+          throw new Error('Unexpected response type');
+        },
+      ),
+    );
+  }
+
+  transaction_abort(token: string): Observable<boolean> {
+    return this.client.methodCall('transaction_abort', [token]).pipe(
+      map<MethodResponse | MethodFault, boolean>(
+        (data: MethodResponse | MethodFault) => {
+          if (AngularXmlrpcService.instanceOfMethodResponse(data)) {
+            return data.value as boolean;
+          } else if (AngularXmlrpcService.instanceOfMethodFault(data)) {
+            throw new Error(
+              'Aborting the current transaction failed with code "' +
+                data.faultCode +
+                '" and error message "' +
+                data.faultString +
+                '"',
+            );
+          }
+          throw new Error('Unexpected response type');
+        },
+      ),
+    );
   }
 }
