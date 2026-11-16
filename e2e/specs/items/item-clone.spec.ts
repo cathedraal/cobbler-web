@@ -37,6 +37,12 @@ for (const config of STANDARD_ITEM_CONFIGS) {
 
         await itemPage.clone(name, cloneName);
 
+        // gotoEdit() re-navigates (rather than reusing clone()'s in-place nav), giving the new
+        // edit page's refreshData() RPC chain time to resolve before edit() touches the form -
+        // same reason item-crud.spec.ts's create() is always followed by a separate gotoEdit()
+        // rather than editing immediately after create's own navigation.
+        await itemPage.gotoEdit(cloneName);
+
         // The clone is independently editable, and editing it must not mutate the original.
         await itemPage.edit(config.editableField);
         await page.reload();

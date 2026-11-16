@@ -30,11 +30,15 @@ test.describe('Template CRUD', () => {
     await expect(page).toHaveURL(/\/items\/template\//);
 
     await page.goto(`/items/template/${name}`);
-    await page.locator('[data-testid="item-edit-toggle"]').click();
+    const editToggle = page.locator('[data-testid="item-edit-toggle"]');
+    await editToggle.click();
     await page
       .locator('[formcontrolname="content"]')
       .fill('# e2e edited content\n');
     await page.locator('[data-testid="item-save-button"]').click();
+    // Save chains sequential RPCs before flipping isEditMode back to false (re-enabling the
+    // toggle) - wait for that rather than racing a reload against the save still in flight.
+    await expect(editToggle).toBeEnabled();
     await page.reload();
     await expect(page.locator('[formcontrolname="content"]')).toHaveValue(
       '# e2e edited content\n',
