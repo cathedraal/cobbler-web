@@ -66,7 +66,7 @@ E2E tests (Playwright, under `e2e/`) run against a real Cobbler backend:
 
 ```bash
 npm run e2e:install                       # one-time: install Playwright's Chromium browser
-COBBLER_IMAGE_TAG=v4.0.0b7 docker compose -f e2e/compose.yml up -d
+COBBLER_IMAGE_TAG=v4.0.0b11 docker compose -f e2e/compose.yml up -d
 npm run e2e                               # or `npm run e2e:ci` for the production build config
 ```
 

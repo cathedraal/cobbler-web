@@ -13,7 +13,7 @@ cobbler-tftp, pulling published `ghcr.io/cobbler/cobblerd` images directly — n
 the backend repo needed):
 
 ```bash
-COBBLER_IMAGE_TAG=v4.0.0b7 docker compose -f e2e/compose.yml up -d
+COBBLER_IMAGE_TAG=v4.0.0b11 docker compose -f e2e/compose.yml up -d
 curl http://localhost/cobbler_api        # -> routed to cobblerd's XMLRPC server
 ```
 
