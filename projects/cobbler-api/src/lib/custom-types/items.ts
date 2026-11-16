@@ -79,6 +79,7 @@ export interface Distro extends BootableItem {
   redhat_management_password: Value.INHERITED;
   source_repos: Array<string>;
   source_tree_path: string;
+  remote_boot_iso: string;
   remote_boot_kernel: string;
   remote_grub_kernel: string;
   remote_boot_initrd: string;

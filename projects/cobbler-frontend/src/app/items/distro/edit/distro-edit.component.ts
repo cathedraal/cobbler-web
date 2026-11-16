@@ -173,6 +173,16 @@ export class DistroEditComponent implements OnInit, OnDestroy {
       hint: $localize`:@@distro.edit.hint.remote_boot_initrd:URL (tftp:// or http://) to an initrd that the bootloader fetches directly.`,
     },
     {
+      formControlName: 'remote_boot_iso',
+      inputType: CobblerInputChoices.TEXT,
+      label: $localize`:@@distro.edit.label.remote_boot_iso:Remote Boot ISO`,
+      disabled: true,
+      readonly: false,
+      defaultValue: '',
+      inherited: false,
+      hint: $localize`:@@distro.edit.hint.remote_boot_iso:URL (tftp:// or http://) to the original installation ISO this distro was imported from, used to build the netboot URL for casper (Ubuntu live-server/Subiquity).`,
+    },
+    {
       formControlName: 'remote_boot_kernel',
       inputType: CobblerInputChoices.TEXT,
       label: $localize`:@@distro.edit.label.remote_boot_kernel:Remote Boot Kernel`,
@@ -435,6 +445,7 @@ export class DistroEditComponent implements OnInit, OnDestroy {
             initrd: this.distro.initrd,
             remote_boot_kernel: this.distro.remote_boot_kernel,
             remote_boot_initrd: this.distro.remote_boot_initrd,
+            remote_boot_iso: this.distro.remote_boot_iso,
             os_version: this.distro.os_version,
             redhat_management_key: this.distro.redhat_management_key,
           });
