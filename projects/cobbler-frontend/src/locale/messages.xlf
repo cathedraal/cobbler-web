@@ -1384,6 +1384,22 @@
         <source>{}</source>
       </segment>
     </unit>
+    <unit id="common.key-value-editor.json.error.invalid">
+      <notes>
+        <note category="location">projects/cobbler-frontend/src/app/common/key-value-editor/key-value-editor.component.ts:151</note>
+      </notes>
+      <segment>
+        <source>Invalid JSON: <ph id="0" equiv="PH" disp="message"/></source>
+      </segment>
+    </unit>
+    <unit id="common.key-value-editor.json.error.not-object">
+      <notes>
+        <note category="location">projects/cobbler-frontend/src/app/common/key-value-editor/key-value-editor.component.ts:160</note>
+      </notes>
+      <segment>
+        <source>Value must be a JSON object</source>
+      </segment>
+    </unit>
     <unit id="common.multi-select.empty">
       <notes>
         <note category="location">projects/cobbler-frontend/src/app/common/multi-select/multi-select.component.html:10,14</note>
@@ -1595,18 +1611,18 @@
         <note category="location">projects/cobbler-frontend/src/app/items/network-interface/edit/network-interface-edit.component.html:164,169</note>
         <note category="location">projects/cobbler-frontend/src/app/items/profile-group/edit/profile-group-edit.component.html:177,182</note>
         <note category="location">projects/cobbler-frontend/src/app/items/profile-group/edit/profile-group-edit.component.html:193,198</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:191,195</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:212,217</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:229,234</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:246,251</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:262,267</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/repository/edit/repository-edit.component.html:203,208</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/repository/edit/repository-edit.component.html:219,224</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:192,196</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:213,218</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:230,235</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:247,252</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:263,268</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/repository/edit/repository-edit.component.html:204,209</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/repository/edit/repository-edit.component.html:220,225</note>
         <note category="location">projects/cobbler-frontend/src/app/items/system-group/edit/system-group-edit.component.html:177,182</note>
         <note category="location">projects/cobbler-frontend/src/app/items/system-group/edit/system-group-edit.component.html:193,198</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:212,216</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:233,238</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:250,255</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:213,217</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:234,239</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:251,256</note>
         <note category="location">projects/cobbler-frontend/src/app/items/template/edit/template-edit.component.html:158,163</note>
       </notes>
       <segment>
@@ -1862,7 +1878,7 @@
     </unit>
     <unit id="distro.edit.button.save">
       <notes>
-        <note category="location">projects/cobbler-frontend/src/app/items/distro/edit/distro-edit.component.html:252,257</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/distro/edit/distro-edit.component.html:253,258</note>
       </notes>
       <segment>
         <source> Save Distro </source>
@@ -3304,7 +3320,7 @@
     </unit>
     <unit id="profile.edit.button.save">
       <notes>
-        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:153,159</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/profile/edit/edit-profile/profile-edit.component.html:154,160</note>
       </notes>
       <segment>
         <source> Save Profile </source>
@@ -3858,7 +3874,7 @@
     </unit>
     <unit id="repository.edit.button.save">
       <notes>
-        <note category="location">projects/cobbler-frontend/src/app/items/repository/edit/repository-edit.component.html:142,148</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/repository/edit/repository-edit.component.html:143,149</note>
       </notes>
       <segment>
         <source> Save Repository </source>
@@ -4315,7 +4331,7 @@
     </unit>
     <unit id="system.edit.button.save">
       <notes>
-        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:174,180</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:175,181</note>
       </notes>
       <segment>
         <source> Save System </source>
@@ -4323,8 +4339,8 @@
     </unit>
     <unit id="2024288761458915869">
       <notes>
-        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:267,272</note>
-        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:283,288</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:268,273</note>
+        <note category="location">projects/cobbler-frontend/src/app/items/system/edit/system-edit/system-edit.component.html:284,289</note>
       </notes>
       <segment>
         <source>Inherited </source>

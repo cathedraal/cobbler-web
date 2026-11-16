@@ -183,4 +183,14 @@ describe('KeyValueEditorComponent', () => {
 
     expect(component.mode).toEqual('simple');
   });
+
+  it('switchToSimple is a no-op while the current value is nested, even with no jsonError', () => {
+    component.writeValue({ nested: { x: '1' } });
+    expect(component.mode).toEqual('json');
+    expect(component.jsonError).toBeNull();
+
+    component.switchToSimple();
+
+    expect(component.mode).toEqual('json');
+  });
 });

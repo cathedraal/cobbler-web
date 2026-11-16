@@ -62,4 +62,39 @@ test.describe('autoinstall_meta JSON mode', () => {
       await backend.removeItem('distro', name).catch(() => {});
     }
   });
+
+  test('invalid JSON shows a visible error and blocks save', async ({
+    page,
+    backend,
+  }, testInfo) => {
+    const name = e2eName(testInfo.parallelIndex, 'distro');
+    await backend.createItem('distro', distroConfig.createFields({ name }));
+
+    try {
+      const itemPage = new ItemCrudPage(page, distroConfig);
+      await itemPage.gotoEdit(name);
+
+      const metaCard = page
+        .locator('mat-card')
+        .filter({ hasText: 'Automatic Installation Template Metadata' });
+
+      await page.locator('[data-testid="item-edit-toggle"]').click();
+      await metaCard.locator('[data-testid="key-value-mode-json"]').click();
+      await metaCard
+        .locator('[data-testid="key-value-json-textarea"]')
+        .fill('{ not valid json');
+
+      await expect(
+        metaCard.locator('[data-testid="key-value-json-error"]'),
+      ).toBeVisible();
+      await expect(
+        page.locator('[data-testid="item-save-button"]'),
+      ).toBeDisabled();
+      await expect(
+        metaCard.locator('[data-testid="key-value-mode-simple"]'),
+      ).toBeDisabled();
+    } finally {
+      await backend.removeItem('distro', name).catch(() => {});
+    }
+  });
 });

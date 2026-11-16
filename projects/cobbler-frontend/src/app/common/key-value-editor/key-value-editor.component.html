@@ -5,17 +5,29 @@
       <cobbler-help-button [hint]="hint" />
     }
   </mat-card-header>
-  <button mat-button data-testid="key-value-mode-simple"
-          [class.active]="mode === 'simple'"
-          [disabled]="isDisabled || mode === 'simple'"
-          (click)="switchToSimple()"
-          i18n="@@common.key-value-editor.mode.simple">Simple</button>
-  <button mat-button data-testid="key-value-mode-json"
-          [class.active]="mode === 'json'"
-          [disabled]="isDisabled || mode === 'json'"
-          (click)="switchToJson()"
-          i18n="@@common.key-value-editor.mode.json">JSON</button>
-  @if (mode === 'simple') {
+  <button
+    mat-button
+    data-testid="key-value-mode-simple"
+    [class.active]="mode === 'simple'"
+    [disabled]="
+      isDisabled || mode === 'simple' || !!jsonError || hasNestedValue()
+    "
+    (click)="switchToSimple()"
+    i18n="@@common.key-value-editor.mode.simple"
+  >
+    Simple
+  </button>
+  <button
+    mat-button
+    data-testid="key-value-mode-json"
+    [class.active]="mode === 'json'"
+    [disabled]="isDisabled || mode === 'json'"
+    (click)="switchToJson()"
+    i18n="@@common.key-value-editor.mode.json"
+  >
+    JSON
+  </button>
+  @if (mode === "simple") {
     @if (Object.keys(this.keyValueOptions).length === 0) {
       <p style="text-align: center" i18n="@@common.key-value-editor.empty">
         Empty list of options
@@ -72,17 +84,23 @@
       Add option
     </button>
   }
-  @if (mode === 'json') {
+  @if (mode === "json") {
     <mat-form-field class="form-field-full-width">
-      <textarea matInput rows="12" data-testid="key-value-json-textarea"
-                [value]="jsonText"
-                [disabled]="isDisabled"
-                (input)="onJsonInput($event)"
-                placeholder="{}"
-                i18n-placeholder="@@common.key-value-editor.json.placeholder"></textarea>
-      @if (jsonError) {
-        <mat-error data-testid="key-value-json-error">{{ jsonError }}</mat-error>
-      }
+      <textarea
+        matInput
+        rows="12"
+        data-testid="key-value-json-textarea"
+        [value]="jsonText"
+        [disabled]="isDisabled"
+        (input)="onJsonInput($event)"
+        placeholder="{}"
+        i18n-placeholder="@@common.key-value-editor.json.placeholder"
+      ></textarea>
     </mat-form-field>
+    @if (jsonError) {
+      <p class="json-error" role="alert" data-testid="key-value-json-error">
+        {{ jsonError }}
+      </p>
+    }
   }
 </mat-card>

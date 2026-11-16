@@ -7,6 +7,12 @@
   width: 100%;
 }
 
+.json-error {
+  color: var(--mat-sys-error, #b3261e);
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
 .card-header {
   display: flex;
   align-items: center;

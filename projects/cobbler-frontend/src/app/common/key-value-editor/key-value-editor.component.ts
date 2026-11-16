@@ -135,7 +135,7 @@ export class KeyValueEditorComponent
   }
 
   switchToSimple(): void {
-    if (this.jsonError) {
+    if (this.jsonError || this.hasNestedValue()) {
       return;
     }
     this.mode = 'simple';
@@ -147,7 +147,8 @@ export class KeyValueEditorComponent
     try {
       parsed = JSON.parse(text);
     } catch (e) {
-      this.jsonError = 'Invalid JSON: ' + (e as Error).message;
+      const message = (e as Error).message;
+      this.jsonError = $localize`:@@common.key-value-editor.json.error.invalid:Invalid JSON: ${message}`;
       this.onValidatorChange?.();
       return;
     }
@@ -156,7 +157,7 @@ export class KeyValueEditorComponent
       typeof parsed !== 'object' ||
       Array.isArray(parsed)
     ) {
-      this.jsonError = 'Value must be a JSON object';
+      this.jsonError = $localize`:@@common.key-value-editor.json.error.not-object:Value must be a JSON object`;
       this.onValidatorChange?.();
       return;
     }
