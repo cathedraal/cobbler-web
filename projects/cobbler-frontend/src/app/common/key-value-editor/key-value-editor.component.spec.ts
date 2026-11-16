@@ -88,4 +88,99 @@ describe('KeyValueEditorComponent', () => {
     expect(component.keyValueOptions).toEqual({ a: '1', b: '2' });
     expect(component.keyOrder).toEqual(['a', 'b']);
   });
+
+  it('writeValue defaults to simple mode for flat data', () => {
+    component.writeValue({ a: '1', b: '2' });
+    expect(component.mode).toEqual('simple');
+  });
+
+  it('writeValue auto-selects json mode when a value is nested', () => {
+    component.writeValue({ flat: '1', nested: { x: '2' } });
+    expect(component.mode).toEqual('json');
+    expect(JSON.parse(component.jsonText)).toEqual({
+      flat: '1',
+      nested: { x: '2' },
+    });
+  });
+
+  it('applyJsonText commits a valid nested object via onChange', () => {
+    component.writeValue({});
+    const onChange = vi.fn();
+    component.onChange = onChange;
+    component.onTouched = vi.fn();
+
+    const nested = {
+      'user-data': { users: [{ name: 'a', groups: ['sudo'] }] },
+    };
+    component.applyJsonText(JSON.stringify(nested));
+
+    expect(component.jsonError).toBeNull();
+    expect(onChange).toHaveBeenCalledWith(nested);
+    expect(component.keyValueOptions).toEqual(nested);
+  });
+
+  it('applyJsonText sets jsonError on malformed JSON and does not call onChange', () => {
+    component.writeValue({});
+    const onChange = vi.fn();
+    component.onChange = onChange;
+    component.onTouched = vi.fn();
+
+    component.applyJsonText('{ not valid json');
+
+    expect(component.jsonError).not.toBeNull();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('applyJsonText rejects a non-object top level (array)', () => {
+    component.writeValue({});
+    const onChange = vi.fn();
+    component.onChange = onChange;
+
+    component.applyJsonText('[1,2,3]');
+
+    expect(component.jsonError).not.toBeNull();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('onJsonInput extracts the textarea value and delegates to applyJsonText', () => {
+    component.writeValue({});
+    const spy = vi
+      .spyOn(component, 'applyJsonText')
+      .mockImplementation(() => {});
+    const event = { target: { value: '{"a":"1"}' } } as unknown as Event;
+
+    component.onJsonInput(event);
+
+    expect(spy).toHaveBeenCalledWith('{"a":"1"}');
+  });
+
+  it('validate returns an error only in json mode with a pending jsonError', () => {
+    component.writeValue({ a: '1' });
+    expect(component.validate(null as any)).toBeNull();
+
+    component.switchToJson();
+    component.applyJsonText('not json');
+    expect(component.validate(null as any)).toEqual({
+      invalidJson: component.jsonError,
+    });
+  });
+
+  it('switchToSimple is a no-op while jsonError is set', () => {
+    component.writeValue({ a: '1' });
+    component.switchToJson();
+    component.applyJsonText('not json');
+
+    component.switchToSimple();
+
+    expect(component.mode).toEqual('json');
+  });
+
+  it('switchToSimple returns to simple mode once valid', () => {
+    component.writeValue({ a: '1' });
+    component.switchToJson();
+
+    component.switchToSimple();
+
+    expect(component.mode).toEqual('simple');
+  });
 });

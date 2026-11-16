@@ -99,6 +99,16 @@ export class CobblerXmlRpcClient {
     return handle;
   }
 
+  async getItem(type: string, name: string): Promise<Record<string, unknown>> {
+    const handle = await this.getItemHandle(type, name);
+    return this.call(`get_${type}`, [
+      handle,
+      false,
+      false,
+      this.requireToken(),
+    ]);
+  }
+
   async removeItem(
     type: string,
     name: string,

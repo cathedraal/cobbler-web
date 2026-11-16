@@ -69,6 +69,10 @@ export class KeyValueEditorComponent
   keyOrder: string[] = Object.keys(this.keyValueOptions);
   keyOrderFormGroup = new FormGroup({});
   isDisabled = true;
+  mode: 'simple' | 'json' = 'simple';
+  jsonText = '{}';
+  jsonError: string | null = null;
+  private onValidatorChange: (() => void) | undefined;
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -78,7 +82,9 @@ export class KeyValueEditorComponent
     this.onTouched = fn;
   }
 
-  registerOnValidatorChange(fn: () => void): void {}
+  registerOnValidatorChange(fn: () => void): void {
+    this.onValidatorChange = fn;
+  }
 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
@@ -94,7 +100,15 @@ export class KeyValueEditorComponent
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return undefined;
+    return this.mode === 'json' && this.jsonError
+      ? { invalidJson: this.jsonError }
+      : null;
+  }
+
+  hasNestedValue(): boolean {
+    return Object.values(this.keyValueOptions).some(
+      (v) => v !== null && typeof v === 'object',
+    );
   }
 
   writeValue(obj: Record<string, any>): void {
@@ -109,6 +123,54 @@ export class KeyValueEditorComponent
     this.keyValueOptions = obj;
     this.keyOrder = Object.keys(this.keyValueOptions);
     this.buildFormGroup();
+    this.jsonText = JSON.stringify(obj, null, 2);
+    this.jsonError = null;
+    this.mode = this.hasNestedValue() ? 'json' : 'simple';
+  }
+
+  switchToJson(): void {
+    this.jsonText = JSON.stringify(this.keyValueOptions, null, 2);
+    this.jsonError = null;
+    this.mode = 'json';
+  }
+
+  switchToSimple(): void {
+    if (this.jsonError) {
+      return;
+    }
+    this.mode = 'simple';
+  }
+
+  applyJsonText(text: string): void {
+    this.jsonText = text;
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(text);
+    } catch (e) {
+      this.jsonError = 'Invalid JSON: ' + (e as Error).message;
+      this.onValidatorChange?.();
+      return;
+    }
+    if (
+      parsed === null ||
+      typeof parsed !== 'object' ||
+      Array.isArray(parsed)
+    ) {
+      this.jsonError = 'Value must be a JSON object';
+      this.onValidatorChange?.();
+      return;
+    }
+    this.jsonError = null;
+    this.keyValueOptions = parsed as Record<string, any>;
+    this.keyOrder = Object.keys(this.keyValueOptions);
+    this.buildFormGroup();
+    this.onChange(this.keyValueOptions);
+    this.onTouched();
+    this.onValidatorChange?.();
+  }
+
+  onJsonInput(event: Event): void {
+    this.applyJsonText((event.target as HTMLTextAreaElement).value);
   }
 
   buildFormGroup(): void {
