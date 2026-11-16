@@ -66,4 +66,61 @@ test.describe('System network interface', () => {
       await removeAncestorChain(backend, chain);
     }
   });
+
+  /**
+   * Regression test for a backend bug (fixed alongside an internal `keep_uid` make_clone()
+   * param): copying a System that has a NetworkInterface with a real IP/MAC/DNS used to fail
+   * with a false "duplicate IP/MAC/DNS" validation error, because the clone's interface was
+   * being compared against its own not-yet-renamed source instead of being excluded from the
+   * uniqueness check.
+   */
+  test('cloning a system with a configured network interface does not trigger a false duplicate-IP/MAC/DNS error', async ({
+    page,
+    backend,
+  }, testInfo) => {
+    const { chain, immediateParentUid: profileUid } = await createAncestorChain(
+      backend,
+      systemConfig,
+      testInfo.parallelIndex,
+    );
+    const systemName = e2eName(testInfo.parallelIndex, 'system');
+    const cloneName = `${systemName}-clone`;
+    await backend.createItem(
+      'system',
+      systemConfig.createFields({ name: systemName, parentUid: profileUid }),
+    );
+
+    try {
+      const interfaceName = 'eth0';
+      await page.goto(`/items/system/${systemName}/interface`);
+      await page.locator('[data-testid="item-add-button"]').click();
+      await page.locator('[formcontrolname="name"]').fill(interfaceName);
+      await page
+        .locator('[formcontrolname="mac_address"]')
+        .fill('52:54:00:aa:bb:cc');
+      await page.locator('[data-testid="item-create-submit"]').click();
+      await expect(page).toHaveURL(new RegExp(`/interface/${interfaceName}`));
+
+      await page.goto(`/items/system/${systemName}`);
+      await page
+        .locator('button')
+        .filter({ has: page.locator('mat-icon', { hasText: 'content_copy' }) })
+        .click();
+      await page.getByLabel('New name').fill(cloneName);
+      await page.getByRole('button', { name: 'Copy', exact: true }).click();
+
+      // A false duplicate-validation error would surface as a snackbar and keep the page on the
+      // source system's edit URL instead of navigating to the clone.
+      await expect(page).toHaveURL(new RegExp(`/items/system/${cloneName}`));
+
+      await page.goto(`/items/system/${cloneName}/interface`);
+      await expect(
+        page.getByRole('row', { name: interfaceName }),
+      ).toBeVisible();
+    } finally {
+      await backend.removeItem('system', cloneName, true).catch(() => {});
+      await backend.removeItem('system', systemName, true).catch(() => {});
+      await removeAncestorChain(backend, chain);
+    }
+  });
 });

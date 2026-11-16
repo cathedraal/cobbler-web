@@ -1,9 +1,12 @@
 import { distroConfig } from './distro.config';
+import { distroGroupConfig } from './distro-group.config';
 import { imageConfig } from './image.config';
 import { menuConfig } from './menu.config';
 import { profileConfig } from './profile.config';
+import { profileGroupConfig } from './profile-group.config';
 import { repositoryConfig } from './repository.config';
 import { systemConfig } from './system.config';
+import { systemGroupConfig } from './system-group.config';
 import { ItemConfig } from './types';
 
 /**
@@ -14,6 +17,8 @@ import { ItemConfig } from './types';
  * specs instead of this generic, config-driven one. ManagementClass/Package/File were removed
  * entirely (no longer exist server-side as of the Cobbler 4.0.0 rewrite - no corresponding
  * frontend/api support remains either, so there's nothing left for these configs to test).
+ * DistroGroup/ProfileGroup/SystemGroup (new in Cobbler 4.0.0) follow the identical pattern too
+ * (no parent, no special create fields beyond name), so they slot straight into this matrix.
  */
 export const STANDARD_ITEM_CONFIGS: ItemConfig[] = [
   distroConfig,
@@ -22,6 +27,9 @@ export const STANDARD_ITEM_CONFIGS: ItemConfig[] = [
   repositoryConfig,
   imageConfig,
   menuConfig,
+  distroGroupConfig,
+  profileGroupConfig,
+  systemGroupConfig,
 ];
 
 export const ITEM_CONFIGS_BY_TYPE: Record<string, ItemConfig> =

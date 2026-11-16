@@ -40,6 +40,20 @@ for (const config of STANDARD_ITEM_CONFIGS) {
         await itemPage.rename(name, renamedName);
         await itemPage.expectRowVisible(renamedName);
 
+        // Cobbler 4.0.0's resolution is uid-based, not name-based - confirm the item still
+        // resolves and remains editable under its new name post-rename.
+        await itemPage.gotoEdit(renamedName);
+        const postRenameEditValue = `${config.editableField.value}-post-rename`;
+        await itemPage.edit({
+          label: config.editableField.label,
+          value: postRenameEditValue,
+        });
+        await page.reload();
+        await itemPage.expectFieldValue(
+          config.editableField.label,
+          postRenameEditValue,
+        );
+
         await itemPage.delete(renamedName);
         await itemPage.expectRowHidden(renamedName);
       } finally {

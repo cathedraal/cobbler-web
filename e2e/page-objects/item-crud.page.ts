@@ -58,6 +58,25 @@ export class ItemCrudPage {
     await this.page.getByRole('button', { name: 'Rename' }).click();
   }
 
+  /**
+   * Clones an item via the edit page's "Copy" icon button (content_copy), shared verbatim across
+   * every item type's edit template, and waits for the nav to the clone's own edit page.
+   */
+  async clone(name: string, newName: string): Promise<void> {
+    await this.gotoEdit(name);
+    await this.page
+      .locator('button')
+      .filter({
+        has: this.page.locator('mat-icon', { hasText: 'content_copy' }),
+      })
+      .click();
+    await this.page.getByLabel('New name').fill(newName);
+    await this.page.getByRole('button', { name: 'Copy', exact: true }).click();
+    await expect(this.page).toHaveURL(
+      new RegExp(`${this.config.overviewRoute}/${newName}`),
+    );
+  }
+
   async delete(name: string): Promise<void> {
     await this.gotoOverview();
     await this.openRowMenu(name);
