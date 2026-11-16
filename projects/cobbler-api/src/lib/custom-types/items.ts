@@ -118,12 +118,10 @@ export interface NetworkInterface extends BaseItem {
   connected_mode: boolean;
   dhcp_tag: string;
   dns: DnsInterfaceOption;
-  if_gateway: string;
   interface_master: string;
   interface_type: NetworkInterfaceType.NA;
   ipv4: Ipv4Option;
   ipv6: Ipv6Option;
-  ipv6_default_gateway: string;
   ipv6_static_routes: Array<string>;
   mac_address: string;
   management: boolean;

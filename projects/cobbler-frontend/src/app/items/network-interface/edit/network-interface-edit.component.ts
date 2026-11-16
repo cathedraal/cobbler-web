@@ -124,16 +124,6 @@ export class NetworkInterfaceEditComponent implements OnInit, OnDestroy {
       group: $localize`:@@option-group.dns:DNS`,
     },
     {
-      formControlName: 'if_gateway',
-      inputType: CobblerInputChoices.TEXT,
-      label: $localize`:@@network-interface.edit.label.if_gateway:Interface Gateway (IPv4)`,
-      disabled: true,
-      readonly: false,
-      defaultValue: '',
-      inherited: false,
-      hint: $localize`:@@network-interface.edit.hint.if_gateway:Per-interface IPv4 gateway. Overrides the system-level gateway for this interface.`,
-    },
-    {
       formControlName: 'interface_master',
       inputType: CobblerInputChoices.TEXT,
       label: $localize`:@@network-interface.edit.label.interface_master:Interface Master`,
@@ -165,6 +155,17 @@ export class NetworkInterfaceEditComponent implements OnInit, OnDestroy {
       group: $localize`:@@option-group.ipv4:IPv4`,
     },
     {
+      formControlName: 'ip_default_gateway',
+      inputType: CobblerInputChoices.TEXT,
+      label: $localize`:@@network-interface.edit.label.ip_default_gateway:Default Gateway`,
+      disabled: true,
+      readonly: false,
+      defaultValue: '',
+      inherited: false,
+      hint: $localize`:@@network-interface.edit.hint.ip_default_gateway:Per-interface IPv4 gateway. Overrides the system-level gateway for this interface.`,
+      group: $localize`:@@option-group.ipv4:IPv4`,
+    },
+    {
       formControlName: 'ipv6_address',
       inputType: CobblerInputChoices.TEXT,
       label: $localize`:@@network-interface.edit.label.ipv6_address:Address`,
@@ -178,12 +179,13 @@ export class NetworkInterfaceEditComponent implements OnInit, OnDestroy {
     {
       formControlName: 'ipv6_default_gateway',
       inputType: CobblerInputChoices.TEXT,
-      label: $localize`:@@network-interface.edit.label.ipv6_default_gateway:IPv6 Default Gateway`,
+      label: $localize`:@@network-interface.edit.label.ipv6_default_gateway:Default Gateway`,
       disabled: true,
       readonly: false,
       defaultValue: '',
       inherited: false,
       hint: $localize`:@@network-interface.edit.hint.ipv6_default_gateway:IPv6 gateway for this interface.`,
+      group: $localize`:@@option-group.ipv6:IPv6`,
     },
     {
       formControlName: 'ipv6_mtu',
@@ -346,13 +348,11 @@ export class NetworkInterfaceEditComponent implements OnInit, OnDestroy {
             bridge_opts: this.networkInterface.bridge_opts,
             connected_mode: this.networkInterface.connected_mode,
             dhcp_tag: this.networkInterface.dhcp_tag,
-            if_gateway: this.networkInterface.if_gateway,
             interface_master: this.networkInterface.interface_master,
             interface_type: this.networkInterface.interface_type,
-            // `ipv6_default_gateway` and `ipv6_static_routes` are genuine top-level
-            // NetworkInterface attributes and are deliberately NOT read from the `ipv6`
-            // sub-object, which carries its own distinct `default_gateway`/`static_routes`.
-            ipv6_default_gateway: this.networkInterface.ipv6_default_gateway,
+            // `ipv6_static_routes` is a genuine top-level NetworkInterface attribute and is
+            // deliberately NOT read from the `ipv6` sub-object, which carries its own distinct
+            // `static_routes`.
             ipv6_static_routes: this.networkInterface.ipv6_static_routes,
             mac_address: this.networkInterface.mac_address,
             management: this.networkInterface.management,
@@ -364,10 +364,12 @@ export class NetworkInterfaceEditComponent implements OnInit, OnDestroy {
             cnames: this.networkInterface.dns.common_names,
             dns_name: this.networkInterface.dns.name,
             ip_address: this.networkInterface.ipv4.address,
+            ip_default_gateway: this.networkInterface.ipv4.default_gateway,
             mtu: this.networkInterface.ipv4.mtu,
             netmask: this.networkInterface.ipv4.netmask,
             static_routes: this.networkInterface.ipv4.static_routes,
             ipv6_address: this.networkInterface.ipv6.address,
+            ipv6_default_gateway: this.networkInterface.ipv6.default_gateway,
             ipv6_mtu: this.networkInterface.ipv6.mtu,
             ipv6_prefix: this.networkInterface.ipv6.prefix,
             ipv6_secondaries: this.networkInterface.ipv6.secondaries,
@@ -485,10 +487,12 @@ export class NetworkInterfaceEditComponent implements OnInit, OnDestroy {
     cnames: ['dns', 'common_names'],
     dns_name: ['dns', 'name'],
     ip_address: ['ipv4', 'address'],
+    ip_default_gateway: ['ipv4', 'default_gateway'],
     mtu: ['ipv4', 'mtu'],
     netmask: ['ipv4', 'netmask'],
     static_routes: ['ipv4', 'static_routes'],
     ipv6_address: ['ipv6', 'address'],
+    ipv6_default_gateway: ['ipv6', 'default_gateway'],
     ipv6_mtu: ['ipv6', 'mtu'],
     ipv6_prefix: ['ipv6', 'prefix'],
     ipv6_secondaries: ['ipv6', 'secondaries'],

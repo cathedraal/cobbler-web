@@ -10,6 +10,7 @@ export interface ItemOption<T extends ItemType = ItemType> {
 
 export interface IpOption extends ItemOption<'NetworkInterface'> {
   address: string;
+  default_gateway: string;
   static_routes: Array<string> | [];
   mtu: string;
 }
@@ -46,7 +47,6 @@ export interface Ipv4Option extends IpOption {
 }
 
 export interface Ipv6Option extends IpOption {
-  default_gateway: string;
   prefix: string;
   secondaries: Array<string> | [];
 }
